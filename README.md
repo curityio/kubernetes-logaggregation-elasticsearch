@@ -20,12 +20,12 @@ Run scripts then connect to the Elasticsearch service like this:
 curl -k -u 'elastic:Password1' https://api.curitylogs.local
 ```
 
-Navigate to Kibana at https://curitylogs.local and sign in as `elastic / Password1`.\
-Then query Curity logs from the entire cluster field by field:
+Navigate to the Kibana UI at https://curitylogs.local and sign in as `elastic / Password1`.\
+Then query Curity Identity Server logs from the entire cluster field by field:
 
 ![Dev Tools](/images/devtools.png)
 
-Results of a filtered query can be exported via this command, if logs need to be sent to Curity:
+Filtered results from all servers can be exported via the API and sent to Curity if required:
 
 - TODO
 
