@@ -63,7 +63,7 @@ Run the following script to use [certmanager](https://cert-manager.io/docs/) to 
 Then run this script to deploy and configure the Elastic components:
 
 ```bash
-3-deploy-elastic.sh
+./3-deploy-elastic.sh
 ```
 
 ## Documentation
