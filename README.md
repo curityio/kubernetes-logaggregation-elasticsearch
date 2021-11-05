@@ -25,14 +25,14 @@ Then query Curity logs from the entire cluster field by field:
 
 ![Dev Tools](/images/devtools.png)
 
-Results of a filtered query can be exported via this command, such as to send to Curity:
+Results of a filtered query can be exported via this command, if logs need to be sent to Curity:
 
 - TODO
 
 ## Prerequisites
 
-First run the [Kubernetes Demo Installation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
-Clone its [GitHub repository](https://github.com/curityio/kubernetes-quick-start) and ensure sufficient resources:
+Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
+When creating the cluster, ensure sufficient resources for the Elastic components by using these values:
 
 ```bash
 minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
@@ -40,8 +40,8 @@ minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profi
 
 ## Elastic Components Setup
 
-Run `minikube ip --profile curity` to get the minikube virtual machine's IP address.\
-Then add entries like this to the `hosts` file on the local computer:
+Run `minikube ip --profile curity` to get the virtual machine's IP address.\
+Then add these domains against the IP address in the `hosts` file on the local computer:
 
 ```bash
 192.168.64.4   api.curitylogs.local curitylogs.local
