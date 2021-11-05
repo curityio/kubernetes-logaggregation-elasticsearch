@@ -1,68 +1,75 @@
-# Log Aggregation with the Elastic Stack
+# Aggregation of Curity Logs to Elasticsearch
 
 A repo to show how to aggregate logs from the Curity Identity Server and then query results.
 
-## Usage
+## Components
 
-This GitHub repository extends the [Kubernetes Demo Installation](https://curity.io/resources/learn/kubernetes-demo-installation/) to use log aggregation.\
-The Kibana tool can then be used to query logs for the Curity Identity Server on a field by field basis:
+The following Elastic components are used:
 
-SCREENSHOT
+| Component | URL | Behavior |
+| --------- | --- | -------- |
+| Elasticsearch | https://api.curitylogs.local | The main Elasticsearch component including API and data storage |
+| Filebeat | N/A | A component that sends Curity Identity Server logs to the Elasticsearch API |
+| Kibana | https://curitylogs.local | A UI used to query logs field by field and to set filters |
+
+## Log Usage
+
+Run scripts then connect to the Elasticsearch service like this:
+
+```bash
+curl -k -u 'elastic:Password1' https://api.curitylogs.local
+```
+
+Navigate to Kibana at https://curitylogs.local and sign in as `elastic / Password1`.\
+Then query Curity logs from the entire cluster field by field:
+
+![Dev Tools](/images/devtools.png)
+
+Results of a filtered query can be exported via this command, such as to send to Curity:
+
+- TODO
 
 ## Prerequisites
 
-First run the [Kubernetes Demo Installation](https://curity.io/resources/learn/kubernetes-demo-installation/).
-Edit the `create-cluster.sh` script in the [GitHub repository](https://github.com/curityio/kubernetes-quick-start) to ensure sufficient resources:
+First run the [Kubernetes Demo Installation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
+Clone its [GitHub repository](https://github.com/curityio/kubernetes-quick-start) and ensure sufficient resources:
 
 ```bash
 minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
 ```
 
-Also include the `logs.curity.local` domain name when updating the hosts file:
+## Elastic Components Setup
+
+Run `minikube ip --profile curity` to get the minikube virtual machine's IP address.\
+Then add entries like this to the `hosts` file on the local computer:
 
 ```bash
-192.168.64.54  login.curity.local admin.curity.local logs.curity.local
+192.168.64.4   api.curitylogs.local curitylogs.local
 ```
 
-## Deploy Elastic Components
-
-Run the following script to deploy Elastic Search, Kibana and Filebeat components.\
-This may take a few minutes since it downloads some large Docker images:
+Run the first script to create certificates for external URLs:
 
 ```bash
-./deploy.sh
+./1-create-external-certs.sh
 ```
 
-## Run the HAAPI Code Example
-
-Run the HAAPI code example to generate some log activity:
-
-## Query Logs via Kibana
-
-Browse to https://logs.curity.local and log in to Kibana with credentials `admin / Password1`:
-
-## Internal URLs
-
-The URLs inside the cluster can be tested as follows:
+In order to use Kibana logins via user name and password, SSL must also be used inside the cluster.\
+Run the following script to use [certmanager](https://cert-manager.io/docs/) to issue these certificates:
 
 ```bash
-ELASTIC_POD=$(kubectl get pods | grep elastic | awk '{print $1}')
-kubectl exec -it $ELASTIC_POD -- bash -c 'curl http://localhost:9200'
+./2-create-internal-certs.sh
 ```
+
+Then run this script to deploy and configure the Elastic components:
 
 ```bash
-KIBANA_POD=$(kubectl get pods | grep kibana | awk '{print $1}')
-kubectl exec -it $KIBANA_POD -- bash -c 'curl http://localhost:5601'
+3-deploy-elastic.sh
 ```
-## Filebeat Aggregation
 
-A few notes on how Filebeat translates logs to JSON documents
+## Documentation
 
-## Understand Logging Best Practices
-
-We recommend use of an appender to redirect system logs from `stdout` to a file:
-
-MORE TO GO HERE
+- See the [Logging Best Practices](https://curity.io/resources/learn/authenticate-with-google-authenticator/) article for the recommended techniques
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/elasticsearch-tutorial/) for a walkthrough of using this repository
 
 ## Free Resources
 

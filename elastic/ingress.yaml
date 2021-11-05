@@ -1,27 +1,28 @@
 #
-# Expose Kibana over port 443 - see the notes in the Elastic version of this file
+# Expose Elastic over port 443 and a custom host name from the computer's hosts file
+# SSL inside the cluster is used, so the below annotations are also required
 #
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kibana-ingress
+  name: elastic-ingress
   annotations:
     nginx.ingress.kubernetes.io/secure-backends: 'true'
     nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
 spec:
   tls:
     - hosts:
-        - curitylogs.local
+        - api.curitylogs.local
       secretName: curitylogs-local-tls
   rules:
-    - host: curitylogs.local
+    - host: api.curitylogs.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: kibana-svc
+                name: elastic-svc
                 port:
-                  number: 5601
+                  number: 9200

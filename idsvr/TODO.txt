@@ -1,1 +1,0 @@
-A log4j file with recommended appenders will go here

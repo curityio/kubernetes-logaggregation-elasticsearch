@@ -1,0 +1,19 @@
+
+#
+# Creates a Kibana SSL certificate - see the notes in the Elastic version of this file
+#
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kibana-svc-internal-cert
+spec:
+  secretName: kibana-svc-internal-cert
+  issuerRef:
+    name: ca-issuer
+    kind: Issuer
+  commonName: kibana-svc.default.svc
+  dnsNames:
+  - kibana-svc
+  - kibana-svc.default.svc
+  - kibana-svc.default.svc.cluster.local
