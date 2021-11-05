@@ -1,0 +1,24 @@
+#
+# Expose Kibana over port 443 and a custom host name from the computer's hosts file
+#
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana-ingress
+spec:
+  tls:
+    - hosts:
+        - logs.curity.local
+      secretName: curity-local-tls
+  rules:
+    - host: logs.curity.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana-svc
+                port:
+                  number: 5601

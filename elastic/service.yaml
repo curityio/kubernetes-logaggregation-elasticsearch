@@ -1,0 +1,43 @@
+#
+# Basic deployment of ElasticSearch containers
+#
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: elastic-svc
+spec:
+  selector:
+    app: elastic
+  ports:
+    - protocol: "TCP"
+      port: 9200
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic
+  labels:
+    app: elastic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic
+  template:
+    metadata:
+      labels:
+        app: elastic
+    spec:
+      containers:
+        - name: elastic
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: xpack.security.enabled
+              value: 'true'
+            - name: ELASTICSEARCH_USERNAME
+              value: elastic
+            - name: ELASTICSEARCH_PASSWORD
+              value: Password1

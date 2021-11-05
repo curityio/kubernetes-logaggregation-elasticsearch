@@ -1,0 +1,46 @@
+#
+# Basic deployment of a Kibana component for querying logs
+#
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana-svc
+spec:
+  selector:
+    app: kibana
+  ports:
+    - protocol: "TCP"
+      port: 5601
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.15.0
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elastic-svc:9200
+            - name: ELASTICSEARCH_USERNAME
+              value: elastic
+            - name: ELASTICSEARCH_PASSWORD
+              value: Password1
+            - name: SERVER_PUBLICBASEURL
+              value: https://logs.elastic.com
+          ports:
+            - containerPort: 5601
+              name: kibana
