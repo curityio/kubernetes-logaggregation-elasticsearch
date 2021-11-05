@@ -1,0 +1,64 @@
+#
+# Creates a Kibana service - see the notes in the Elastic version of this file
+#
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: kibana-svc
+spec:
+  selector:
+    app: kibana
+  ports:
+    - protocol: "TCP"
+      port: 5601
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.15.0
+          volumeMounts:
+          - mountPath: /usr/share/kibana/config/certs
+            name: ssl-cert
+            readOnly: true
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: 'https://elastic-svc:9200'
+            - name: ELASTICSEARCH_USERNAME
+              value: 'elastic'
+            - name: ELASTICSEARCH_PASSWORD
+              value: 'Password1'
+            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
+              value: '/usr/share/kibana/config/certs/ca.crt'
+            - name: SERVER_SSL_ENABLED
+              value: 'true'
+            - name: SERVER_SSL_KEY
+              value: '/usr/share/kibana/config/certs/tls.key'
+            - name: SERVER_SSL_CERTIFICATE
+              value: '/usr/share/kibana/config/certs/tls.crt'
+            - name: SERVER_SSL_CERTIFICATEAUTHORITIES
+              value: '/usr/share/kibana/config/certs/ca.crt'
+            - name: SERVER_PUBLICBASEURL
+              value: https://curitylogs.local
+          ports:
+            - containerPort: 5601
+              name: kibana
+      volumes:
+        - name: ssl-cert
+          secret:
+            secretName: kibana-svc-internal-cert

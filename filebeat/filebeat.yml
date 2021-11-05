@@ -1,0 +1,63 @@
+#
+# Our FileBeat configuration to deploy API JSON logs to Elastic Search
+#
+
+filebeat.inputs:
+
+- type: log
+
+  # Enable log shipping
+  enabled: true
+
+  # Point to API logs
+  paths:
+    - /var/log/webproxyapi/api*.log
+    - /var/log/sampleapi/api*.log
+
+  json:
+    keys_under_root: true
+    overwrite_keys: true
+    add_error_key: false
+
+filebeat.config.modules:
+  path: /usr/share/filebeat/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+# Disable index lifecycle management
+setup.ilm.enabled: false
+
+# Connection details to the Kibana server
+setup.kibana.host: 'https://kibana.mycompany.internal:5601'
+setup.kibana.ssl.enabled: true
+setup.kibana.ssl.key: './config/certs/mycompany.internal.ssl.key'
+setup.kibana.ssl.certificate: './config/certs/mycompany.internal.ssl.pem'
+setup.kibana.ssl.certificate_authorities: ['./config/certs/mycompany.internal.ca.pem']
+
+# Set these to reference our API logs index
+setup.template.name: apilogs
+setup.template.pattern: apilogs-*
+
+output.elasticsearch:
+
+  # Connection details to the ElasticSearch server
+  hosts: ['https://elastic.mycompany.internal:9200']
+  ssl.key: './config/certs/mycompany.internal.ssl.key'
+  ssl.certificate: './config/certs/mycompany.internal.ssl.pem'
+  ssl.certificate_authorities: ['./config/certs/mycompany.internal.ca.pem']
+  username: 'elastic'
+  password: 'Password1' 
+
+  # Reference our Elastic Search index
+  index: apilogs
+
+  # The ingestion pipeline manages finalising Elastic Search data
+  pipelines:
+    - pipeline: apilogs-filebeat-ingest-pipeline
+
+# Configure processors to avoid sending filebeat fields to Elastic Search
+processors:
+  - drop_fields:
+      fields: ['agent', 'ecs', 'host', 'input', 'log', 'version']

@@ -1,0 +1,94 @@
+{
+    "settings": {
+      "index": {
+        "number_of_replicas": "1",
+        "number_of_shards": "5"
+      }
+    },
+    "mappings": 
+    {
+      "properties": 
+      {
+        "id": 
+        {
+          "type": "keyword"
+        },
+        "utcTime": 
+        {
+          "type": "date"
+        },
+        "apiName": 
+        {
+          "type": "keyword"
+        },
+        "operationName": 
+        {
+          "type": "keyword"
+        },
+        "hostName": 
+        {
+          "type": "keyword"
+        },
+        "requestVerb": 
+        {
+          "type": "keyword"
+        },
+        "resourceId": 
+        {
+          "type": "keyword"
+        },
+        "requestPath": 
+        {
+          "type": "keyword"
+        },
+        "clientApplicationName": 
+        {
+          "type": "keyword"
+        },
+        "userOAuthId": 
+        {
+          "type": "keyword"
+        },
+        "statusCode": 
+        {
+          "type": "integer"
+        },
+        "errorCode": 
+        {
+          "type": "keyword"
+        },
+        "errorId": 
+        {
+          "type": "integer"
+        },
+        "millisecondsTaken": 
+        {
+          "type": "integer"
+        },
+        "millisecondsThreshold": 
+        {
+          "type": "integer"
+        },
+        "correlationId": 
+        {
+          "type": "keyword"
+        },
+        "sessionId": 
+        {
+          "type": "keyword"
+        },
+        "performance": {
+          "type": "object",
+          "enabled": false
+        },
+        "errorData": {
+          "type": "object",
+          "enabled": false
+        },
+        "infoData": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  }

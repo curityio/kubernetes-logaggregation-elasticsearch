@@ -1,0 +1,21 @@
+
+#
+# A certmanager resource to use the 'ca-issuer' resource created in base/clusterIssuer.yaml
+# This creates an SSL certificate that is then referenced in service.yaml by the below secret name
+# The 3 Kubernetes host names are included in its subject alternative names
+#
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: elastic-svc-internal-cert
+spec:
+  secretName: elastic-svc-internal-cert
+  issuerRef:
+    name: ca-issuer
+    kind: Issuer
+  commonName: elastic-svc.default.svc
+  dnsNames:
+  - elastic-svc
+  - elastic-svc.default.svc
+  - elastic-svc.default.svc.cluster.local
