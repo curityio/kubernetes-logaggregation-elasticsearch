@@ -1,0 +1,11 @@
+#
+# This will automatically issue a certificate to a service when referenced in a service yaml file
+#
+
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-issuer
+spec:
+  ca:
+    secretName: clusterca
