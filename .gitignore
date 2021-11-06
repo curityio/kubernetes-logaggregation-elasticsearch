@@ -1,4 +1,4 @@
 .DS_Store
 #certs
-!/certs/clusterIssuer.yaml
-!/certs/server.ext
+#!/certs/clusterIssuer.yaml
+#!/certs/server.ext
