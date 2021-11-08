@@ -12,19 +12,6 @@ The following Elastic components are used:
 | Filebeat | N/A | A component that sends Curity Identity Server logs to the Elasticsearch API |
 | Kibana | https://curitylogs.local | A UI used to query logs field by field and to set filters |
 
-## Log Usage
-
-Run scripts then connect to the Elasticsearch service like this:
-
-```bash
-curl -k -u 'elastic:Password1' https://api.curitylogs.local
-```
-
-Navigate to the Kibana UI at https://curitylogs.local and sign in as `elastic / Password1`.\
-Then query Curity Identity Server logs from the entire cluster field by field:
-
-![Initial Query](/images/initial-query.png)
-
 ## Prerequisites
 
 Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
