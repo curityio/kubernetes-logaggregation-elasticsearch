@@ -1,16 +1,10 @@
 {
-    "description": "Curity Logs Ingestion Pipeline",
-    "processors": [
-        {
-            "drop": {
-              "if" : "ctx.apiName == null"
-            },
-            "script": {
-              "source": "ctx._id = ctx.id"
-            },
-            "remove": {
-              "field": "@timestamp"
-            }
-        }
-    ]
+  "description": "Curity System Logs Ingestion Pipeline",
+  "processors": [
+    {
+      "remove": {
+        "field": "@timestamp"
+      }
+    }
+  ]
 }

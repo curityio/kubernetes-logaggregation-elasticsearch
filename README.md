@@ -46,24 +46,28 @@ This creates Elasticsearch schemas and ingestion pipelines ready to receive data
 
 ## Run Apps that use Curity
 
-TODO - Use the HAAPI code example from the quick start
+Use the HAAPI code example from the Kubernetes Demo Installation:
+
+| Field | Value |
+| ----- | ----- |
+| URL | https://login.curity.local/demo-client.html |
+| User | demouser |
+| Password | Password1 |
+
+![Example App](/images/example-app.png)
 
 ## Use Curity Logs
 
 Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console) and sign in as `elastic / Password1`.\
 Then query Curity logs from the entire cluster field by field:
 
-![Dev Tools](/images/devtools.png)
+![Initial Query](/images/initial-query.png)
 
-Also connect to the Elasticsearch API via a REST request:
+You can also connect to the Elasticsearch API via a REST request to perform filtered exports:
 
 ```bash
 curl -k -u 'elastic:Password1' https://api.curitylogs.local
 ```
-
-Export logs for filter criteria via this type of command, if logs need to be sent to Curity:
-
-- TODO
 
 ## Documentation
 
