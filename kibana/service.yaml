@@ -1,5 +1,5 @@
 #
-# Creates a Kibana service - see the notes in the Elastic version of this file
+# Deploy a Kibana container that connects to the Elastic Search container
 #
 
 kind: Service
@@ -32,33 +32,17 @@ spec:
       containers:
         - name: kibana
           image: docker.elastic.co/kibana/kibana:7.15.0
-          volumeMounts:
-          - mountPath: /usr/share/kibana/config/certs
-            name: ssl-cert
-            readOnly: true
           env:
             - name: ELASTICSEARCH_HOSTS
-              value: 'https://elastic-svc:9200'
+              value: 'http://elastic-svc:9200'
             - name: ELASTICSEARCH_USERNAME
               value: 'elastic'
             - name: ELASTICSEARCH_PASSWORD
               value: 'Password1'
-            - name: ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES
-              value: '/usr/share/kibana/config/certs/ca.crt'
             - name: SERVER_SSL_ENABLED
-              value: 'true'
-            - name: SERVER_SSL_KEY
-              value: '/usr/share/kibana/config/certs/tls.key'
-            - name: SERVER_SSL_CERTIFICATE
-              value: '/usr/share/kibana/config/certs/tls.crt'
-            - name: SERVER_SSL_CERTIFICATEAUTHORITIES
-              value: '/usr/share/kibana/config/certs/ca.crt'
+              value: 'false'
             - name: SERVER_PUBLICBASEURL
-              value: https://curitylogs.local
+              value: http://curitylogs.local
           ports:
             - containerPort: 5601
               name: kibana
-      volumes:
-        - name: ssl-cert
-          secret:
-            secretName: kibana-svc-internal-cert

@@ -1,6 +1,5 @@
 #
 # Deploy a single Elasticsearch container with user name and password authentication enabled
-# Note that this also requires SSL inside the cluster, which adds a little to the complexity
 #
 
 kind: Service
@@ -33,32 +32,14 @@ spec:
       containers:
         - name: elastic
           image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
-          volumeMounts:
-          - mountPath: /usr/share/elasticsearch/config/certs
-            name: ssl-cert
-            readOnly: true
           env:
             - name: discovery.type
               value: 'single-node'
             - name: xpack.security.enabled
               value: 'true'
             - name: xpack.security.http.ssl.enabled
-              value: 'true'
+              value: 'false'
             - name: xpack.security.authc.api_key.enabled
               value: 'false'
-            - name: xpack.security.http.ssl.key
-              value: '/usr/share/elasticsearch/config/certs/tls.key'
-            - name: xpack.security.http.ssl.certificate
-              value: '/usr/share/elasticsearch/config/certs/tls.crt'
-            - name: xpack.security.http.ssl.certificate_authorities
-              value: '/usr/share/elasticsearch/config/certs/ca.crt'
             - name: ELASTIC_PASSWORD
               value: 'Password1'
-
-      # The secretName of 'elastic-svc-internal-cert' was created previously in internal-cert.yaml
-      # Referencing the secret name in a volume causes the files tls.key, tls.crt, ca.crt to be deployed
-      volumes:
-        - name: ssl-cert
-          secret:
-            secretName: elastic-svc-internal-cert
-          

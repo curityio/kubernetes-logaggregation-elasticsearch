@@ -1,0 +1,36 @@
+1. Kibana starts erroring after a while due to missing internal objects.
+   Capture these messages the next time they occur.
+   Killing the kibana container fixes this, and on restart I can use the UI again.
+
+2. I am getting some raw data but need to do more work to tidy it up.
+   Do a comparison of the log data to the Elastic data and ensure that the schema contains useful data.
+
+    {
+      "_index" : "curitysystem",
+      "_type" : "_doc",
+      "_id" : "sfvfAH0BR8Xe_8UiH6cR",
+      "_score" : 1.0,
+      "_source" : {
+        "loggerFqcn" : "org.apache.logging.log4j.spi.AbstractLogger",
+        "level" : "INFO",
+        "endOfBatch" : true,
+        "thread" : "req-110",
+        "threadPriority" : 5,
+        "message" : "accept=\"application/vnd.auth+json\" content-type=\"application/vnd.auth+json\" duration=\"183\" lang=\"en-GB,en-US;q=0.9,en;q=0.8\" method=\"GET\" params=\"\" protocol=\"HTTP/1.1\" secure=\"true\" size=\"779\" status=\"200\" uri=\"/authn/authentication/UsernamePassword\"",
+        "instant" : {
+          "epochSecond" : 1636397154,
+          "nanoOfSecond" : 151482000
+        },
+        "threadId" : 12,
+        "stream" : "stdout",
+        "marker" : {
+          "name" : "REQUEST"
+        },
+        "loggerName" : "se.curity.identityserver.app.RequestReceiver",
+        "contextMap" : {
+          "RequestId" : "kx9J9ksa",
+          "SessionId" : "acaececd",
+          "LongSessionId" : "acaececd-1efb-4ece-9943-c137ba02e932"
+        }
+      }
+    }

@@ -23,11 +23,7 @@ curl -k -u 'elastic:Password1' https://api.curitylogs.local
 Navigate to the Kibana UI at https://curitylogs.local and sign in as `elastic / Password1`.\
 Then query Curity Identity Server logs from the entire cluster field by field:
 
-![Dev Tools](/images/devtools.png)
-
-Filtered results from all servers can be exported via the API and sent to Curity if required:
-
-- TODO
+![Initial Query](/images/initial-query.png)
 
 ## Prerequisites
 
@@ -38,7 +34,7 @@ When creating the cluster, ensure sufficient resources for the Elastic component
 minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
 ```
 
-## Elastic Components Setup
+## Deploy Elastic Components
 
 Run `minikube ip --profile curity` to get the virtual machine's IP address.\
 Then add these domains against the IP address in the `hosts` file on the local computer:
@@ -47,29 +43,49 @@ Then add these domains against the IP address in the `hosts` file on the local c
 192.168.64.4   api.curitylogs.local curitylogs.local
 ```
 
-Run the first script to create certificates for external URLs:
+Run the first script to create certificates for the Elasticsearch and Kibana public URLs:
 
 ```bash
-./1-create-external-certs.sh
+./1-create-certs.sh
 ```
 
-In order to use Kibana logins via user name and password, SSL must also be used inside the cluster.\
-Run the following script to use [certmanager](https://cert-manager.io/docs/) to issue these certificates:
+Then run this script to deploy the Elastic components:
 
 ```bash
-./2-create-internal-certs.sh
+2-deploy-elastic.sh
 ```
 
-Then run this script to deploy and configure the Elastic components:
+This creates Elasticsearch schemas and ingestion pipelines ready to receive data.
+
+## Run an Example App
+
+Use the HAAPI code example from the Kubernetes Demo Installation to generate some logs:
+
+| Field | Value |
+| ----- | ----- |
+| URL | https://login.curity.local/demo-client.html |
+| User | demouser |
+| Password | Password1 |
+
+![Example App](/images/example-app.png)
+
+## Query Curity Logs
+
+Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console) and sign in as `elastic / Password1`.\
+Then query Curity logs from the entire cluster field by field:
+
+![Initial Query](/images/initial-query.png)
+
+You can also connect to the Elasticsearch API via a REST request to perform filtered exports:
 
 ```bash
-./3-deploy-elastic.sh
+curl -k -u 'elastic:Password1' https://api.curitylogs.local
 ```
 
 ## Documentation
 
 - See the [Logging Best Practices](https://curity.io/resources/learn/authenticate-with-google-authenticator/) article for the recommended techniques
-- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/elasticsearch-tutorial/) for a walkthrough of using this repository
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/elasticsearch-tutorial/) for a walkthrough of Elasticsearch as an example implementation
 
 ## Free Resources
 

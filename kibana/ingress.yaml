@@ -1,14 +1,12 @@
 #
-# Expose Kibana over port 443 - see the notes in the Elastic version of this file
+# Expose Kibana over port 443 on the URL https://curitylogic.local
+# This domain name must be added to the local computer's hosts file
 #
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kibana-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/secure-backends: 'true'
-    nginx.ingress.kubernetes.io/backend-protocol: 'HTTPS'
 spec:
   tls:
     - hosts:
