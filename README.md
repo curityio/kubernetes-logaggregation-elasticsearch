@@ -1,4 +1,4 @@
-# Aggregation of Curity Logs to Elasticsearch
+# Curity Log Aggregation to Elasticsearch
 
 A repo to show how to aggregate logs from the Curity Identity Server and then query results.
 
