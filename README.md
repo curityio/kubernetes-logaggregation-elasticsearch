@@ -39,7 +39,7 @@ Run the first script to create certificates for the Elasticsearch and Kibana pub
 Then run this script to deploy the Elastic components:
 
 ```bash
-2-deploy-elastic.sh
+./2-deploy-elastic.sh
 ```
 
 This creates Elasticsearch schemas and ingestion pipelines ready to receive data.
