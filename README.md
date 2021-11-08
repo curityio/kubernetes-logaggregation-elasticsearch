@@ -12,6 +12,19 @@ The following Elastic components are used:
 | Filebeat | N/A | A component that sends Curity Identity Server logs to the Elasticsearch API |
 | Kibana | https://curitylogs.local | A UI used to query logs field by field and to set filters |
 
+## Log Usage
+
+Run scripts then connect to the Elasticsearch service like this:
+
+```bash
+curl -k -u 'elastic:Password1' https://api.curitylogs.local
+```
+
+Navigate to the Kibana UI at https://curitylogs.local and sign in as `elastic / Password1`.\
+Then query Curity Identity Server logs from the entire cluster field by field:
+
+![Initial Query](/images/initial-query.png)
+
 ## Prerequisites
 
 Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
@@ -44,9 +57,9 @@ Then run this script to deploy the Elastic components:
 
 This creates Elasticsearch schemas and ingestion pipelines ready to receive data.
 
-## Run Apps that use Curity
+## Run an Example App
 
-Use the HAAPI code example from the Kubernetes Demo Installation:
+Use the HAAPI code example from the Kubernetes Demo Installation to generate some logs:
 
 | Field | Value |
 | ----- | ----- |
@@ -56,7 +69,7 @@ Use the HAAPI code example from the Kubernetes Demo Installation:
 
 ![Example App](/images/example-app.png)
 
-## Use Curity Logs
+## Query Curity Logs
 
 Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console) and sign in as `elastic / Password1`.\
 Then query Curity logs from the entire cluster field by field:
