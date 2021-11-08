@@ -58,8 +58,7 @@ Use the HAAPI code example from the Kubernetes Demo Installation to generate som
 
 ## Query Curity Logs
 
-Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console) and sign in as `elastic / Password1`.\
-Then query Curity logs from the entire cluster field by field:
+Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console), sign in as `elastic / Password1` then query logs field by field:
 
 ![Initial Query](/images/initial-query.png)
 
