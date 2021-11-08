@@ -12,23 +12,6 @@ The following Elastic components are used:
 | Filebeat | N/A | A component that sends Curity Identity Server logs to the Elasticsearch API |
 | Kibana | https://curitylogs.local | A UI used to query logs field by field and to set filters |
 
-## Log Usage
-
-Run scripts then connect to the Elasticsearch service like this:
-
-```bash
-curl -k -u 'elastic:Password1' https://api.curitylogs.local
-```
-
-Navigate to Kibana at https://curitylogs.local and sign in as `elastic / Password1`.\
-Then query Curity logs from the entire cluster field by field:
-
-![Dev Tools](/images/devtools.png)
-
-Results of a filtered query can be exported via this command, if logs need to be sent to Curity:
-
-- TODO
-
 ## Prerequisites
 
 Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
@@ -38,7 +21,7 @@ When creating the cluster, ensure sufficient resources for the Elastic component
 minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
 ```
 
-## Elastic Components Setup
+## Deploy Elastic Components
 
 Run `minikube ip --profile curity` to get the virtual machine's IP address.\
 Then add these domains against the IP address in the `hosts` file on the local computer:
@@ -47,29 +30,45 @@ Then add these domains against the IP address in the `hosts` file on the local c
 192.168.64.4   api.curitylogs.local curitylogs.local
 ```
 
-Run the first script to create certificates for external URLs:
+Run the first script to create certificates for the Elasticsearch and Kibana public URLs:
 
 ```bash
-./1-create-external-certs.sh
+./1-create-certs.sh
 ```
 
-In order to use Kibana logins via user name and password, SSL must also be used inside the cluster.\
-Run the following script to use [certmanager](https://cert-manager.io/docs/) to issue these certificates:
+Then run this script to deploy the Elastic components:
 
 ```bash
-./2-create-internal-certs.sh
+2-deploy-elastic.sh
 ```
 
-Then run this script to deploy and configure the Elastic components:
+This creates Elasticsearch schemas and ingestion pipelines ready to receive data.
+
+## Run Apps that use Curity
+
+TODO - Use the HAAPI code example from the quick start
+
+## Use Curity Logs
+
+Navigate to the [Kibana System](https://curitylogs.local/app/dev_tools#/console) and sign in as `elastic / Password1`.\
+Then query Curity logs from the entire cluster field by field:
+
+![Dev Tools](/images/devtools.png)
+
+Also connect to the Elasticsearch API via a REST request:
 
 ```bash
-3-deploy-elastic.sh
+curl -k -u 'elastic:Password1' https://api.curitylogs.local
 ```
+
+Export logs for filter criteria via this type of command, if logs need to be sent to Curity:
+
+- TODO
 
 ## Documentation
 
 - See the [Logging Best Practices](https://curity.io/resources/learn/authenticate-with-google-authenticator/) article for the recommended techniques
-- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/elasticsearch-tutorial/) for a walkthrough of using this repository
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/elasticsearch-tutorial/) for a walkthrough of Elasticsearch as an example implementation
 
 ## Free Resources
 

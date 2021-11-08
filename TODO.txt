@@ -1,0 +1,5 @@
+1. Get some bare JSON log files being written in Kubernetes
+
+2. Get Filebeat Daemonset deployed and working
+
+3. Look at Identity Server code to understand use of 'request-log' and the root logger
