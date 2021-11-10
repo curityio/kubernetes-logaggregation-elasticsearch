@@ -47,32 +47,53 @@ while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' -u "$ELASTIC_USER:$ELASTI
 done
 
 #
-# Create the Curity logs schemas to receive fields in a queryable manner
+# Create the Curity system log schema
 #
-echo 'Creating Elasticsearch schema ...'
+echo 'Creating Elasticsearch system schema ...'
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d @./create-schema.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '200' ]; then
-  echo "*** Problem encountered creating the Elasticsearch schema: $HTTP_STATUS"
+  echo "*** Problem encountered creating the Curity system schema: $HTTP_STATUS"
   exit
 fi
 
 #
-# Create the Curity ingestion pipelines to control which records are received
+# Create the Curity request log schema
 #
-echo 'Creating Elasticsearch ingestion pipeline ...'
-HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_ingest/pipeline/curitysystem-ingest-pipeline" \
+echo 'Creating Elasticsearch request schema ...'
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d @./create-ingestion-pipeline.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '200' ]; then
-  echo "*** Problem encountered creating the Elastic Search API logs ingestion pipeline: $HTTP_STATUS"
+  echo "*** Problem encountered creating the Curity request schema: $HTTP_STATUS"
   exit
 fi
+
+#
+# Create the Curity ingestion pipeline to control how data is received
+# The source processor's code was typed into Kibana, then the 'Copy as cURL' option was used to get the below data:
+# https://discuss.elastic.co/t/pipeline-processor-script-error/149508
+#
+echo 'Creating Elasticsearch ingestion pipeline ...'
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" \
+-u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
+-H 'Content-Type: application/json' \
+-d'
+{
+  "description": "Curity System Logs Ingestion Pipeline",
+  "processors": [
+    {
+      "script": {
+        "description": "Set the index based on the logger name received",
+        "source": "\n\n          String loggerName = ctx['\''loggerName'\''];\n          if (loggerName != null && loggerName.contains('\''RequestReceiver'\'')) {\n            ctx['\''_index'\''] = '\''curityrequest'\'';\n          } else {\n            ctx['\''_index'\''] = '\''curitysystem'\'';\n          }\n        "
+      }
+    }
+  ]
+}' \
+-o $RESPONSE_FILE -w '%{http_code}')
 
 #
 # Apply the filebeat Daemonset which was downloaded from here and then edited to use the default namespace

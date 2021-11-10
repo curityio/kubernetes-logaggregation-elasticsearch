@@ -1,1 +1,1 @@
-{"acknowledged":true,"shards_acknowledged":true,"index":"curitysystem"}
+{"acknowledged":true}

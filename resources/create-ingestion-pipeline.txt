@@ -1,0 +1,46 @@
+/*
+ * Run this in Kibana to create the ingestion pipeline
+ */
+PUT _ingest/pipeline/curity-ingest-pipeline
+{
+  "description": "Curity System Logs Ingestion Pipeline",
+  "processors": [
+    {
+      "script": {
+        "description": "Set index based on the logger name received",
+        "source": """
+
+          String loggerName = ctx['loggerName'];
+          if (loggerName != null && loggerName.contains('RequestReceiver')) {
+            ctx['_index'] = 'curityrequest';
+          } else {
+            ctx['_index'] = 'curitysystem';
+          }
+        """
+      }
+    }
+  ]
+}
+
+/*
+ * Test the ingestion pipeline via _simulate
+ */
+POST /_ingest/pipeline/curity-ingest-pipeline/_simulate
+{
+  "docs": [
+    {
+      "_index": "index",
+      "_id": "id",
+      "_source": {
+        "loggerName": "other"
+      }
+    },
+    {
+      "_index": "index",
+      "_id": "id",
+      "_source": {
+        "loggerName": "se.curity.identityserver.app.RequestReceiver"
+      }
+    }
+  ]
+}

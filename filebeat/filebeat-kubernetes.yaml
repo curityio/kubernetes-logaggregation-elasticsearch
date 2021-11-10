@@ -18,21 +18,21 @@ data:
         overwrite_keys: true
         add_error_key: false
 
-    setup.ilm.enabled: false
-    setup.template.name: curitysystem
-    setup.template.pattern: curitysystem-*
-
     output.elasticsearch:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
       index: curitysystem
       pipelines:
-      - pipeline: curitysystem-ingest-pipeline
+      - pipeline: curity-ingest-pipeline
+
+    setup.ilm.enabled: false
+    setup.template.name: curitysystem
+    setup.template.pattern: curitysystem-*
 
     processors:
     - drop_fields:
-        fields: ['agent', 'ecs', 'host', 'input', 'log', 'version']
+        fields: ['agent', 'ecs', 'host', 'input', 'version']
 ---
 apiVersion: apps/v1
 kind: DaemonSet
