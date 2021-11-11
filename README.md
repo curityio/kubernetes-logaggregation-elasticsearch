@@ -14,12 +14,14 @@ The following Elastic components are used:
 
 ## Prerequisites
 
-Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
+Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and deploy the base system, following the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
 When creating the cluster, ensure sufficient resources for the Elastic components by using these values:
 
 ```bash
 minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
 ```
+
+Also use the `helm-values.yaml` and `log4j2.xml` files from this repository when deploying the base system.
 
 ## Deploy Elastic Components
 
@@ -27,7 +29,7 @@ Run `minikube ip --profile curity` to get the virtual machine's IP address.\
 Then add these domains against the IP address in the `hosts` file on the local computer:
 
 ```bash
-192.168.64.4   login.curity.local admin.curity.local api.elastic.local elastic.local
+192.168.64.3   login.curity.local admin.curity.local api.elastic.local elastic.local
 ```
 
 Run the first script to deploy Elasticsearch and Kibana:
@@ -36,7 +38,7 @@ Run the first script to deploy Elasticsearch and Kibana:
 ./1-deploy-elastic.sh
 ```
 
-Then run the second script to deploy log shipping configurations and the filebeat component:
+Then run the second script to deploy log shipping configurations and then the filebeat component:
 
 ```bash
 ./2-deploy-log-shipping.sh
