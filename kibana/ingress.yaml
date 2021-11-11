@@ -1,5 +1,5 @@
 #
-# Expose Kibana over port 443 on the URL https://curitylogic.local
+# Expose Kibana over port 80 on the URL http://elastic.local
 # This domain name must be added to the local computer's hosts file
 #
 
@@ -8,12 +8,12 @@ kind: Ingress
 metadata:
   name: kibana-ingress
 spec:
-  tls:
-    - hosts:
-        - curitylogs.local
-      secretName: curitylogs-local-tls
+  #tls:
+  #  - hosts:
+  #      - elastic.local
+  #    secretName: elastic-local-tls
   rules:
-    - host: curitylogs.local
+    - host: elastic.local
       http:
         paths:
           - path: /

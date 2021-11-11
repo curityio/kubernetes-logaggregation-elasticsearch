@@ -1,6 +1,5 @@
 #
-# Expose Elastic over port 443 on the URL https://api.curitylogic.local
-# This domain name must be added to the local computer's hosts file
+# Expose Elastic over port 80 on the URL http://api.elastic.local
 #
 
 apiVersion: networking.k8s.io/v1
@@ -8,12 +7,12 @@ kind: Ingress
 metadata:
   name: elastic-ingress
 spec:
-  tls:
-    - hosts:
-        - api.curitylogs.local
-      secretName: curitylogs-local-tls
+  #tls:
+  #  - hosts:
+  #      - api.elastic.local
+  #    secretName: elastic-local-tls
   rules:
-    - host: api.curitylogs.local
+    - host: api.elastic.local
       http:
         paths:
           - path: /

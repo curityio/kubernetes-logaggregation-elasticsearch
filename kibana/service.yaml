@@ -42,7 +42,7 @@ spec:
             - name: SERVER_SSL_ENABLED
               value: 'false'
             - name: SERVER_PUBLICBASEURL
-              value: http://curitylogs.local
+              value: http://elastic.local
           ports:
             - containerPort: 5601
               name: kibana
