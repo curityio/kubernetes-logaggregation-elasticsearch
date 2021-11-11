@@ -1,0 +1,12 @@
+{
+  "mappings": 
+  {
+    "properties": 
+    {
+      "thrown": {
+        "type": "object",
+        "enabled": false
+      }
+    }
+  }
+}

@@ -22,12 +22,14 @@
             </Policies>
             <DefaultRolloverStrategy max="5"/>
             <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
             </JSONLayout>
         </RollingFile>
 
         <Console name="stdout" target="SYSTEM_OUT">
             <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
             </JSONLayout>
             <filters>
@@ -38,6 +40,7 @@
 
         <Console name="stdout" target="SYSTEM_OUT">
             <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
             </JSONLayout>
             <filters>
@@ -64,6 +67,7 @@
         <RollingFile name="request-log" fileName="${env:IDSVR_HOME}/var/log/request.log"
                      filePattern="${env:IDSVR_HOME}/var/log/request.log.%i.gz">
             <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
             </JSONLayout>
             <Policies>

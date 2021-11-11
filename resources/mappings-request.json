@@ -1,0 +1,24 @@
+{
+  "mappings": 
+  {
+    "properties": 
+    {
+      "http": {
+        "properties" : {
+          "duration": 
+          {
+            "type": "integer"
+          },
+          "size": 
+          {
+            "type": "integer"
+          },
+          "status": 
+          {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

@@ -47,7 +47,7 @@ Then run the second script to deploy log shipping configurations and the filebea
 Run an example app to generate logs, then navigate to the [Kibana System](http://elastic.local/app/dev_tools#/console).\
 Sign in as `elastic / Password1` then query logs across all runtime nodes field by field:
 
-![Initial Query](/images/initial-query.png)
+![Initial Query](/images/example-query.png)
 
 You can also connect to the Elasticsearch API via REST request to query data by schema:
 
@@ -58,7 +58,7 @@ curl -u 'elastic:Password1' http://api.elastic.local/curitysystem/_search | jq
 ## Documentation
 
 - See the [Logging Best Practices](https://curity.io/resources/learn/logging-best-practices) article for the recommended techniques
-- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for a walkthrough of Elasticsearch as an example implementation
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for a walkthrough of using this GitHub repository
 
 ## Free Resources
 

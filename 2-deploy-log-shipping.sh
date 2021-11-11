@@ -1,9 +1,9 @@
 #!/bin/bash
 
-########################################################################################
-# Complete the logging setup by creating Elasticsearch schemas and an ingestion pipeline
+#####################################################################################
+# Complete the logging setup by creating Elasticsearch schemas and an ingest pipeline
 # Then deploy filebeat so that it can start shipping Curity Identity Server logs
-########################################################################################
+#####################################################################################
 
 ELASTIC_URL='http://api.elastic.local'
 ELASTIC_USER='elastic'
@@ -11,14 +11,15 @@ ELASTIC_PASSWORD='Password1'
 RESPONSE_FILE=response.txt
 
 #
-# Create the Curity system log schema
+# Delete then recreate the index for Curity system logs
 #
 cd resources
-echo 'Creating Elasticsearch system schema ...'
+echo 'Creating Elasticsearch system index ...'
 curl -s -X DELETE "$ELASTIC_URL/curitysystem" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
+-d @mappings-system.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the Curity system schema: $HTTP_STATUS"
@@ -26,13 +27,14 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Create the Curity request log schema
+# Delete then recreate the index for Curity request logs
 #
-echo 'Creating Elasticsearch request schema ...'
+echo 'Creating Elasticsearch request index ...'
 curl -s -X DELETE "$ELASTIC_URL/curityrequest" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
+-d @mappings-request.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the Curity request schema: $HTTP_STATUS"
@@ -40,28 +42,29 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Get the ingestion pipeline script processor's code into a single line and write '\n' literal characters
+# Script processors are tricky to manage via the REST API because the script must be flattened to a single line
+# So get the ingest pipeline script processor's code into a single line and write '\n' literal characters
 #
 SCRIPTSOURCE=$(awk '{printf "\\\\n%s", $0}' script-processor.txt)
 
 #
-# Get the JSON to upload
+# Apply it to the ingest pipeline template file to get its full JSON
 #
-INGESTION_PIPELINE_JSON=$(cat ingestion-pipeline-template.json | sed s/SCRIPTSOURCE/"$SCRIPTSOURCE"/g)
-echo "$INGESTION_PIPELINE_JSON" > ingestion-pipeline.json
+INGEST_PIPELINE_JSON=$(cat ingest-pipeline-template.json | sed s/SCRIPTSOURCE/"$SCRIPTSOURCE"/g)
+echo "$INGEST_PIPELINE_JSON" > ingest-pipeline.json
 
 #
-# Create the Curity ingestion pipeline via REST, to control data transformation when logs are received
+# Delete then recreate the Curity ingest pipeline via REST, to control data transformation when logs are received
 #
-echo 'Creating Elasticsearch ingestion pipeline ...'
+echo 'Creating Elasticsearch ingest pipeline ...'
 curl -s -X DELETE "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d @ingestion-pipeline.json \
+-d @ingest-pipeline.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the Elasticsearch ingestion pipeline: $HTTP_STATUS"
+  echo "*** Problem encountered creating the Elasticsearch ingest pipeline: $HTTP_STATUS"
   exit
 fi
 
