@@ -1,6 +1,6 @@
 # Kubernetes Log Aggregation to Elasticsearch
 
-A repo to show how to aggregate logs from the Curity Identity Server and then query results.
+Demonstrates how to aggregate logs from the Curity Identity Server and then query results.
 
 ## Components
 
