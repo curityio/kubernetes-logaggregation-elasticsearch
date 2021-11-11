@@ -1,15 +1,5 @@
-This file contains an example logging event for the request log for request id 5o7y0EGd
-
-INITIAL DOCS
-------------
-GET curityrequest/_search
-
-SCHEMA
-------
-GET curityrequest/_mappings
-
-RAW LOG FILE LINE
------------------
+JSON FILE ROW
+-------------
 {"log": "{\"instant\":{\"epochSecond\":1636624386,\"nanoOfSecond\":93314000},\"thread\":\"req-108\",\"level\":\"INFO\",\"loggerName\":\"se.curity.identityserver.app.RequestReceiver\",\"marker\":{\"name\":\"REQUEST\"},\"message\":\"accept=\\\"application/vnd.auth+json\\\" content-type=\\\"application/vnd.auth+json\\\" duration=\\\"328\\\" lang=\\\"en-GB,en-US;q=0.9,en;q=0.8\\\" method=\\\"POST\\\" params=\\\"\\\" protocol=\\\"HTTP/1.1\\\" secure=\\\"true\\\" size=\\\"560\\\" status=\\\"200\\\" uri=\\\"/oauth/v2/oauth-authorize\\\"\",\"endOfBatch\":true,\"loggerFqcn\":\"org.apache.logging.log4j.spi.AbstractLogger\",\"contextMap\":{\"LongSessionId\":\"34fb63c1-70e8-4be2-9c11-59ae10daa4cf\",\"RequestId\":\"5o7y0EGd\",\"SessionId\":\"34fb63c1\"},\"threadId\":12,\"threadPriority\":5}\r\n","stream": "stdout","time": "2021-11-11T09:53:06.328122882Z"}
 
 RAW FIELDS
@@ -42,24 +32,10 @@ contextMap:
 - LongSessionId
 - RequestId
 - SessionId
-- threadId
-- threadPriority
+threadId
+threadPriority
 
-FINDING IT
-----------
-GET curityrequest/_search
-{
-  "query" : {
-    "match" : { "contextMap.RequestId" : "5o7y0EGd" }
-  }
-}
-
-POST _sql?format=txt
-{
-"query": "SELECT message from curityrequest where contextMap.RequestId='5o7y0EGd'"
-}
-
-DEFAULT DEFAULT PRODUCED
+DEFAULT ELASTIC DATA
 ------------------------
 {
 "_index" : "curityrequest",
@@ -106,13 +82,6 @@ POST /_ingest/pipeline/curity-ingest-pipeline/_simulate
       "_index": "index",
       "_id": "id",
       "_source": {
-        "loggerName": "other"
-      }
-    },
-    {
-      "_index": "index",
-      "_id": "id",
-      "_source": {
         "loggerFqcn" : "org.apache.logging.log4j.spi.AbstractLogger",
         "log" : {
         "file" : {
@@ -146,115 +115,5 @@ POST /_ingest/pipeline/curity-ingest-pipeline/_simulate
   ]
 }
 
-DROP FIELDS
------------
-
-KIBANA
-------
-Get recent queries:
-
-
-
-GET apilogs/_search
-{
-  "query" : {
-    "match" : { "errorId" : 43240 }
-  }
-}
-
-
-DEFAULT ELASTIC DATA
---------------------
-Run 
-
-How to feed this into the script processor?
-
-{
-"_index" : "curityrequest",
-"_type" : "_doc",
-"_id" : "5NHFCn0Ba2ViKE3EVg1o",
-"_score" : 1.0,
-"_source" : {
-    "loggerFqcn" : "org.apache.logging.log4j.spi.AbstractLogger",
-    "level" : "INFO",
-    "log" : {
-    "file" : {
-        "path" : "/var/log/containers/curity-idsvr-runtime-7454859bbc-x5nmv_default_request-984045afaeec1c2c5edd46c682c3df97c5b1e8b308284e8c5da29b1b959e1cb1.log"
-    },
-    "offset" : 1596
-    },
-    "endOfBatch" : true,
-    "thread" : "req-104",
-    "message" : "accept=\"application/vnd.auth+json\" content-type=\"application/vnd.auth+json\" duration=\"164\" lang=\"en-GB,en-US;q=0.9,en;q=0.8\" method=\"GET\" params=\"\" protocol=\"HTTP/1.1\" secure=\"true\" size=\"222\" status=\"200\" uri=\"/authn/authentication\"",
-    "threadPriority" : 5,
-    "instant" : {
-    "epochSecond" : 1636563239,
-    "nanoOfSecond" : 798111000
-    },
-    "threadId" : 12,
-    "@timestamp" : "2021-11-10T16:53:59.981Z",
-    "stream" : "stdout",
-    "marker" : {
-    "name" : "REQUEST"
-    },
-    "contextMap" : {
-    "RequestId" : "J9GWOa4P",
-    "SessionId" : "9198f461",
-    "LongSessionId" : "9198f461-6374-4171-9bd4-ddd3b37b7a46"
-    },
-    "loggerName" : "se.curity.identityserver.app.RequestReceiver"
-}
-}
-
-The date and time
-Request ID
-Client IP address (potentially that of a reverse proxy)
-HTTP method
-URI of the request
-HTTP form and/or query string arguments
-HTTP protocol used
-Accepted language of the caller (not included when extended logging is enabled)
-The client’s accepted content types (not included when extended logging is enabled)
-HTTP status code of the resulting request
-Size of the HTTP response body
-Content type of the HTTP response body
-Whether or not the connection was made over HTTPS
-HTTP request headers
-HTTP response headers
-How long the request look to process
-The location from where the client made the request
-Session ID (for persistent sessions only)
-
-
-FIELDS WE GET
--------------
-instant:
-- epochSecond
-- nanoOfSecond
-thread
-level
-loggerName
-marker:
-- name: REQUEST
-message:
-- accept
-- content-type
-- duration
-- lang
-- method
-- params
-- protocol
-- secure
-- size
-- status
-- uri
-endOfBatch
-loggerFqcn
-streamduration
-stdout
-contextMap:
-- LongSessionId
-- RequestId
-- SessionId
-- threadId
-- threadPriority
+FINAL ELASTIC DATA
+------------------

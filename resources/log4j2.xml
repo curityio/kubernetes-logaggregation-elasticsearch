@@ -21,11 +21,15 @@
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
             <DefaultRolloverStrategy max="5"/>
-            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true"/>
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+            </JSONLayout>
         </RollingFile>
 
         <Console name="stdout" target="SYSTEM_OUT">
-            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true"/>
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+            </JSONLayout>
             <filters>
                 <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <MarkerFilter marker="EXTENDED_REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -33,7 +37,9 @@
         </Console>
 
         <Console name="stdout" target="SYSTEM_OUT">
-            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true"/>
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+            </JSONLayout>
             <filters>
                 <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <MarkerFilter marker="EXTENDED_REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -57,7 +63,9 @@
 
         <RollingFile name="request-log" fileName="${env:IDSVR_HOME}/var/log/request.log"
                      filePattern="${env:IDSVR_HOME}/var/log/request.log.%i.gz">
-            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true"/>
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+            </JSONLayout>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>

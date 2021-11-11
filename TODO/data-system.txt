@@ -1,78 +1,9 @@
-This file contains an example logging event for the system log
-
-LOGGED JSON DATA
-{"log":"{\"instant\":{\"epochSecond\":1636624382,\"nanoOfSecond\":763513000},\"thread\":\"req-109\",\"level\":\"WARN\",\"loggerName\":\"se.curity.identityserver.controllers.cat.AttestationValidator\",\"message\":\"Skipping validation of CAT data because client 'haapi-web-client' is configured to not validate attestation!\",\"endOfBatch\":true,\"loggerFqcn\":\"org.apache.logging.slf4j.Log4jLogger\",\"contextMap\":{\"LongSessionId\":\"30bc442d-e9b2-42a4-a073-c46eb0e75e35\",\"RequestId\":\"j5ruCeyw\",\"SessionId\":\"30bc442d\"},\"threadId\":12,\"threadPriority\":5}\r\n","stream":"stdout","time":"2021-11-11T09:53:02.764188234Z"}
-
-FIELDS:
-
-A raw request log entry:
-{"log": "{\"instant\":{\"epochSecond\":1636624386,\"nanoOfSecond\":93314000},\"thread\":\"req-108\",\"level\":\"INFO\",\"loggerName\":\"se.curity.identityserver.app.RequestReceiver\",\"marker\":{\"name\":\"REQUEST\"},\"message\":\"accept=\\\"application/vnd.auth+json\\\" content-type=\\\"application/vnd.auth+json\\\" duration=\\\"328\\\" lang=\\\"en-GB,en-US;q=0.9,en;q=0.8\\\" method=\\\"POST\\\" params=\\\"\\\" protocol=\\\"HTTP/1.1\\\" secure=\\\"true\\\" size=\\\"560\\\" status=\\\"200\\\" uri=\\\"/oauth/v2/oauth-authorize\\\"\",\"endOfBatch\":true,\"loggerFqcn\":\"org.apache.logging.log4j.spi.AbstractLogger\",\"contextMap\":{\"LongSessionId\":\"34fb63c1-70e8-4be2-9c11-59ae10daa4cf\",\"RequestId\":\"5o7y0EGd\",\"SessionId\":\"34fb63c1\"},\"threadId\":12,\"threadPriority\":5}\r\n","stream": "stdout","time": "2021-11-11T09:53:06.328122882Z"}
-
-A raw system log entry:
-{"log":"{\"instant\":{\"epochSecond\":1636624382,\"nanoOfSecond\":763513000},\"thread\":\"req-109\",\"level\":\"WARN\",\"loggerName\":\"se.curity.identityserver.controllers.cat.AttestationValidator\",\"message\":\"Skipping validation of CAT data because client 'haapi-web-client' is configured to not validate attestation!\",\"endOfBatch\":true,\"loggerFqcn\":\"org.apache.logging.slf4j.Log4jLogger\",\"contextMap\":{\"LongSessionId\":\"30bc442d-e9b2-42a4-a073-c46eb0e75e35\",\"RequestId\":\"j5ruCeyw\",\"SessionId\":\"30bc442d\"},\"threadId\":12,\"threadPriority\":5}\r\n","stream":"stdout","time":"2021-11-11T09:53:02.764188234Z"}
-
-
-How to feed this into the script processor?
-
-{
-"_index" : "curityrequest",
-"_type" : "_doc",
-"_id" : "5NHFCn0Ba2ViKE3EVg1o",
-"_score" : 1.0,
-"_source" : {
-    "loggerFqcn" : "org.apache.logging.log4j.spi.AbstractLogger",
-    "level" : "INFO",
-    "log" : {
-    "file" : {
-        "path" : "/var/log/containers/curity-idsvr-runtime-7454859bbc-x5nmv_default_request-984045afaeec1c2c5edd46c682c3df97c5b1e8b308284e8c5da29b1b959e1cb1.log"
-    },
-    "offset" : 1596
-    },
-    "endOfBatch" : true,
-    "thread" : "req-104",
-    "message" : "accept=\"application/vnd.auth+json\" content-type=\"application/vnd.auth+json\" duration=\"164\" lang=\"en-GB,en-US;q=0.9,en;q=0.8\" method=\"GET\" params=\"\" protocol=\"HTTP/1.1\" secure=\"true\" size=\"222\" status=\"200\" uri=\"/authn/authentication\"",
-    "threadPriority" : 5,
-    "instant" : {
-    "epochSecond" : 1636563239,
-    "nanoOfSecond" : 798111000
-    },
-    "threadId" : 12,
-    "@timestamp" : "2021-11-10T16:53:59.981Z",
-    "stream" : "stdout",
-    "marker" : {
-    "name" : "REQUEST"
-    },
-    "contextMap" : {
-    "RequestId" : "J9GWOa4P",
-    "SessionId" : "9198f461",
-    "LongSessionId" : "9198f461-6374-4171-9bd4-ddd3b37b7a46"
-    },
-    "loggerName" : "se.curity.identityserver.app.RequestReceiver"
-}
-}
-
-The date and time
-Request ID
-Client IP address (potentially that of a reverse proxy)
-HTTP method
-URI of the request
-HTTP form and/or query string arguments
-HTTP protocol used
-Accepted language of the caller (not included when extended logging is enabled)
-The client’s accepted content types (not included when extended logging is enabled)
-HTTP status code of the resulting request
-Size of the HTTP response body
-Content type of the HTTP response body
-Whether or not the connection was made over HTTPS
-HTTP request headers
-HTTP response headers
-How long the request look to process
-The location from where the client made the request
-Session ID (for persistent sessions only)
-
-
-FIELDS WE GET
+JSON FILE ROW
 -------------
+{"log":"{\"instant\":{\"epochSecond\":1636624382,\"nanoOfSecond\":763513000},\"thread\":\"req-109\",\"level\":\"WARN\",\"loggerName\":\"se.curity.identityserver.controllers.cat.AttestationValidator\",\"message\":\"Skipping validation of CAT data because client 'haapi-web-client' is configured to not validate attestation!\",\"endOfBatch\":true,\"loggerFqcn\":\"org.apache.logging.slf4j.Log4jLogger\",\"contextMap\":{\"LongSessionId\":\"30bc442d-e9b2-42a4-a073-c46eb0e75e35\",\"RequestId\":\"j5ruCeyw\",\"SessionId\":\"30bc442d\"},\"threadId\":12,\"threadPriority\":5}\r\n","stream":"stdout","time":"2021-11-11T09:53:02.764188234Z"}
+
+RAW FIELDS
+----------
 instant:
 - epochSecond
 - nanoOfSecond
@@ -82,24 +13,59 @@ loggerName
 marker:
 - name: REQUEST
 message:
-- accept
-- content-type
-- duration
-- lang
-- method
-- params
-- protocol
-- secure
-- size
-- status
-- uri
 endOfBatch
 loggerFqcn
-streamduration
-stdout
 contextMap:
 - LongSessionId
 - RequestId
 - SessionId
-- threadId
-- threadPriority
+threadId
+threadPriority
+
+DEFAULT ELASTIC DATA
+--------------------
+
+SCRIPT PROCESSOR INPUT
+----------------------
+POST /_ingest/pipeline/curity-ingest-pipeline/_simulate
+{
+  "docs": [
+    {
+      "_index": "index",
+      "_id": "id",
+      "_source": {
+        "loggerFqcn" : "org.apache.logging.log4j.spi.AbstractLogger",
+        "log" : {
+        "file" : {
+            "path" : "/var/log/containers/curity-idsvr-runtime-7454859bbc-gnl99_default_request-e96aa347cecb0eff6b378ac44570d207c8ea1d9f950ca950f096119d7dca2deb.log"
+        },
+        "offset" : 6348
+        },
+        "level" : "INFO",
+        "endOfBatch" : true,
+        "thread" : "req-108",
+        "message" : "accept=\"application/vnd.auth+json\" content-type=\"application/vnd.auth+json\" duration=\"328\" lang=\"en-GB,en-US;q=0.9,en;q=0.8\" method=\"POST\" params=\"\" protocol=\"HTTP/1.1\" secure=\"true\" size=\"560\" status=\"200\" uri=\"/oauth/v2/oauth-authorize\"",
+        "threadPriority" : 5,
+        "instant" : {
+        "epochSecond" : 1636624386,
+        "nanoOfSecond" : 93314000
+        },
+        "threadId" : 12,
+        "@timestamp" : "2021-11-11T09:53:06.328Z",
+        "stream" : "stdout",
+        "marker" : {
+        "name" : "REQUEST"
+        },
+        "contextMap" : {
+        "RequestId" : "5o7y0EGd",
+        "SessionId" : "34fb63c1",
+        "LongSessionId" : "34fb63c1-70e8-4be2-9c11-59ae10daa4cf"
+        },
+        "loggerName" : "se.curity.identityserver.app.RequestReceiver"
+        }
+      }
+  ]
+}
+
+FINAL ELASTIC DATA
+------------------

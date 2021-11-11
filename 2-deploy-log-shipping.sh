@@ -15,6 +15,7 @@ RESPONSE_FILE=response.txt
 #
 cd resources
 echo 'Creating Elasticsearch system schema ...'
+curl -s -X DELETE "$ELASTIC_URL/curitysystem" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
@@ -28,6 +29,7 @@ fi
 # Create the Curity request log schema
 #
 echo 'Creating Elasticsearch request schema ...'
+curl -s -X DELETE "$ELASTIC_URL/curityrequest" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
@@ -38,7 +40,7 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Get the ingestion pipeline script processor's code into a single line
+# Get the ingestion pipeline script processor's code into a single line and write '\n' literal characters
 #
 SCRIPTSOURCE=$(awk '{printf "\\\\n%s", $0}' script-processor.txt)
 
@@ -49,9 +51,10 @@ INGESTION_PIPELINE_JSON=$(cat ingestion-pipeline-template.json | sed s/SCRIPTSOU
 echo "$INGESTION_PIPELINE_JSON" > ingestion-pipeline.json
 
 #
-# Create the Curity ingestion pipeline to control how data is received
+# Create the Curity ingestion pipeline via REST, to control data transformation when logs are received
 #
 echo 'Creating Elasticsearch ingestion pipeline ...'
+curl -s -X DELETE "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \

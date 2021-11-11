@@ -1,11 +1,11 @@
-String loggerName = ctx.marker.name;
-if (loggerName == 'REQUEST') {
+String loggerName = ctx.loggerName;
+if (loggerName.contains('RequestReceiver')) {
   ctx['_index'] = 'curityrequest';
 } else {
   ctx['_index'] = 'curitysystem';
 }
 
-if (loggerName == 'REQUEST') {
+if (loggerName.contains('RequestReceiver')) {
   String message = ctx['message'];
   String[] fieldPairs = message.splitOnToken(' ');
 

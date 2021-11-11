@@ -6,6 +6,22 @@ To introduce Elasticsearch:
 
 2. Indicate initial queries to understand Elastic defaults - _search / _mappings
 
+FINDING IT
+----------
+GET curityrequest/_search
+{
+  "query" : {
+    "match" : { "contextMap.RequestId" : "5o7y0EGd" }
+  }
+}
+
+POST _sql?format=txt
+{
+"query": "SELECT message from curityrequest where contextMap.RequestId='5o7y0EGd'"
+}
+
+SCENARIOS
+---------
 DATA
 ----
 3. Get a better outgoing format via JSONLayout or JSONTemplateLayout and mention the second option
