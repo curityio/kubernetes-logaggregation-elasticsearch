@@ -38,26 +38,24 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
+# Get the ingestion pipeline script processor's code into a single line
+#
+SCRIPTSOURCE=$(awk '{printf "\\\\n%s", $0}' script-processor.txt)
+
+#
+# Get the JSON to upload
+#
+INGESTION_PIPELINE_JSON=$(cat ingestion-pipeline-template.json | sed s/SCRIPTSOURCE/"$SCRIPTSOURCE"/g)
+echo "$INGESTION_PIPELINE_JSON" > ingestion-pipeline.json
+
+#
 # Create the Curity ingestion pipeline to control how data is received
-# The source processor's code was typed into Kibana, then the 'Copy as cURL' option was used to get the below data:
-# https://discuss.elastic.co/t/pipeline-processor-script-error/149508
 #
 echo 'Creating Elasticsearch ingestion pipeline ...'
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_ingest/pipeline/curity-ingest-pipeline" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d'
-{
-  "description": "Curity System Logs Ingestion Pipeline",
-  "processors": [
-    {
-      "script": {
-        "description": "Set the index based on the logger name received",
-        "source": "\n\n          String loggerName = ctx['\''loggerName'\''];\n          if (loggerName != null && loggerName.contains('\''RequestReceiver'\'')) {\n            ctx['\''_index'\''] = '\''curityrequest'\'';\n          } else {\n            ctx['\''_index'\''] = '\''curitysystem'\'';\n          }\n        "
-      }
-    }
-  ]
-}' \
+-d @ingestion-pipeline.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the Elasticsearch ingestion pipeline: $HTTP_STATUS"
@@ -65,7 +63,7 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Apply the filebeat Daemonset which was downloaded from here and then edited to use the default namespace
+# Finally apply the filebeat Daemonset which was downloaded from here and then edited to use the default namespace
 # https://raw.githubusercontent.com/elastic/beats/7.15/deploy/kubernetes/filebeat-kubernetes.yaml
 #
 cd ../filebeat

@@ -3,3 +3,4 @@ certs
 !/certs/clusterIssuer.yaml
 !/certs/server.ext
 resources/response.txt
+resources/ingestion-pipeline.json

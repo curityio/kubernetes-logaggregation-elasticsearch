@@ -8,10 +8,6 @@ kind: Ingress
 metadata:
   name: kibana-ingress
 spec:
-  #tls:
-  #  - hosts:
-  #      - elastic.local
-  #    secretName: elastic-local-tls
   rules:
     - host: elastic.local
       http:

@@ -7,10 +7,6 @@ kind: Ingress
 metadata:
   name: elastic-ingress
 spec:
-  #tls:
-  #  - hosts:
-  #      - api.elastic.local
-  #    secretName: elastic-local-tls
   rules:
     - host: api.elastic.local
       http:

@@ -1,0 +1,18 @@
+TODO
+----
+To introduce Elasticsearch:
+
+1. Mention dev tools as useful for field by field queries
+
+2. Indicate initial queries to understand Elastic defaults - _search / _mappings
+
+DATA
+----
+3. Get a better outgoing format via JSONLayout or JSONTemplateLayout and mention the second option
+
+4. More about script processor
+
+5. Ensure that these fields work:
+   - host
+   - datetime
+   - Contains queries on message object to find exception by name

@@ -1,0 +1,12 @@
+{
+  "description": "Curity Logs Ingestion Pipeline",
+  "processors": [
+    {
+      "script": {
+        "lang": "painless",
+        "description": "Transform incoming data",
+        "source": "SCRIPTSOURCE"
+      }
+    }
+  ]
+}
