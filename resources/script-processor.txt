@@ -1,11 +1,6 @@
 String loggerName = ctx.loggerName;
 if (loggerName.contains('RequestReceiver')) {
-  ctx['_index'] = 'curityrequest';
-} else {
-  ctx['_index'] = 'curitysystem';
-}
-
-if (loggerName.contains('RequestReceiver')) {
+  ctx['_index'] = ctx['_index'].replace('curitysystem', 'curityrequest');
   String message = ctx['message'];
   String[] fieldPairs = message.splitOnToken(' ');
 

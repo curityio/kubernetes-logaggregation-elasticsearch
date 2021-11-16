@@ -49,6 +49,13 @@ Then run the second script to deploy log shipping configurations and then the fi
 Run an example app to generate logs, then navigate to the [Kibana System](http://elastic.local/app/dev_tools#/console).\
 Sign in as `elastic / Password1` then query logs across all runtime nodes field by field:
 
+```sql
+POST _sql?format=txt
+{
+  "query": "select right(hostname, 5) as host, contextMap.RequestId as requestID, contextMap.SessionId as sessionID, http.method, http.uri, http.status, http.duration from \"curityrequest*\" order by http.duration desc limit 20"
+}
+```
+
 ![Initial Query](/images/example-query.png)
 
 You can also connect to the Elasticsearch API via REST request to query data by schema:

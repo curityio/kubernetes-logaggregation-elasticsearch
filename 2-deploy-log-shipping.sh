@@ -14,12 +14,12 @@ RESPONSE_FILE=response.txt
 # Delete then recreate the index for Curity system logs
 #
 cd resources
-echo 'Creating Elasticsearch system index ...'
-curl -s -X DELETE "$ELASTIC_URL/curitysystem" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
-HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curitysystem" \
+echo 'Creating Elasticsearch system index template ...'
+curl -s -X DELETE "$ELASTIC_URL/curitysystem*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_template/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d @mappings-system.json \
+-d @indextemplate-curitysystem.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the Curity system schema: $HTTP_STATUS"
@@ -29,12 +29,12 @@ fi
 #
 # Delete then recreate the index for Curity request logs
 #
-echo 'Creating Elasticsearch request index ...'
-curl -s -X DELETE "$ELASTIC_URL/curityrequest" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
-HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/curityrequest" \
+echo 'Creating Elasticsearch request index template ...'
+curl -s -X DELETE "$ELASTIC_URL/curityrequest*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_template/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
--d @mappings-request.json \
+-d @indextemplate-curityrequest.json \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the Curity request schema: $HTTP_STATUS"

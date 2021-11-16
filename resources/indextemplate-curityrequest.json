@@ -1,4 +1,5 @@
 {
+  "index_patterns": ["curityrequest*"],
   "mappings": 
   {
     "properties": 
