@@ -43,7 +43,7 @@ kubectl apply -f ingress.yaml
 #
 echo 'Waiting for the Elasticsearch service ...'
 while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' -u "$ELASTIC_USER:$ELASTIC_PASSWORD" "$ELASTIC_URL")" != "200" ]; do
-  sleep 2s
+  sleep 2
 done
 
 #
@@ -52,5 +52,5 @@ done
 KIBANA_URL='http://elastic.local'
 echo 'Waiting for Kibana to come online ...'
 while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' -u "$ELASTIC_USER:$ELASTIC_PASSWORD" "$ELASTIC_URL")" != "200" ]; do
-  sleep 2s
+  sleep 2
 done

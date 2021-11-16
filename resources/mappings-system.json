@@ -3,9 +3,52 @@
   {
     "properties": 
     {
+      "timestamp": {
+        "type": "date"
+      },
+      "hostname": {
+        "type": "keyword"
+      },
+      "level": {
+        "type": "keyword"
+      },
+      "loggerName": {
+        "type": "keyword"
+      },
+      "loggerFqcn": {
+        "type": "keyword"
+      },
+      "message": {
+        "type": "keyword"
+      },
+      "thread": {
+        "type": "keyword"
+      },
+      "threadId": {
+        "type": "integer"
+      },
+      "threadPriority": {
+        "type": "integer"
+      },
       "thrown": {
         "type": "object",
         "enabled": false
+      },
+      "contextMap": {
+        "properties" : {
+          "RequestId": 
+          {
+            "type": "keyword"
+          },
+          "SessionId": 
+          {
+            "type": "keyword"
+          },
+          "LongSessionId": 
+          {
+            "type": "keyword"
+          }
+        }
       }
     }
   }

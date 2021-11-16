@@ -15,7 +15,6 @@ data:
         - /var/log/containers/curity-idsvr-runtime*.log
       json:
         keys_under_root: true
-        overwrite_keys: true
         add_error_key: false
 
     output.elasticsearch:
