@@ -31,6 +31,15 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# At the time of writing there is a minikube 1.26+ timeout issue with large repos
+# Therefore pre-pull them to workaround this problem
+# https://github.com/kubernetes/minikube/issues/14806
+#
+minikube ssh docker pull docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+minikube ssh docker pull docker.elastic.co/kibana/kibana:8.4.3
+minikube ssh docker pull docker.elastic.co/beats/filebeat:8.4.3
+
+#
 # Deploy Elastic Search in a basic single node setup and expose it over port 80
 #
 cd elastic
