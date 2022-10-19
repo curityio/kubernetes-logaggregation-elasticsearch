@@ -29,11 +29,10 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Delete then recreate the index for Curity system logs
+# Create the index for Curity system logs
 #
 cd resources
 echo 'Creating Elasticsearch system index template ...'
-curl -s -X DELETE "$ELASTIC_URL/curitysystem*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_index_template/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
@@ -45,10 +44,9 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Delete then recreate the index for Curity request logs
+# Create the index for Curity request logs
 #
 echo 'Creating Elasticsearch request index template ...'
-curl -s -X DELETE "$ELASTIC_URL/curityrequest*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_index_template/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \

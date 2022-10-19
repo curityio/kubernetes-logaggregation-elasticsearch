@@ -14,12 +14,12 @@ The following Elastic components are used:
 
 ## Prerequisites
 
-First follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/) to deploy the base system.\
+First follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/) to deploy the base system using minikube.\
 This uses the [Kubernetes Quick Start](https://github.com/curityio/kubernetes-quick-start) repository, which requires some updates.
 
 ## Configuration Updates
 
-Once working, edit the `helm-values.yaml` file to activate tailing of request logs:
+Once the base setup is working, edit the `helm-values.yaml` file to activate tailing of request logs:
 
 ```yaml
   runtime:
