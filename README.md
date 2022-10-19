@@ -14,7 +14,8 @@ The following Elastic components are used:
 
 ## Prerequisites
 
-Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and deploy the base system, following the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
+First follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/) to deploy the base system.\
+This uses the [Kubernetes Quick Start](https://github.com/curityio/kubernetes-quick-start) repository, which requires some updates.
 
 ## Configuration Updates
 
