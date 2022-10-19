@@ -5,10 +5,28 @@
 # Then deploy filebeat so that it can start shipping Curity Identity Server logs
 #####################################################################################
 
+#
+# Ensure that we are in the folder containing this script
+#
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+#
+# API connection details
+#
 ELASTIC_URL='http://api.elastic.local'
 ELASTIC_USER='elastic'
 ELASTIC_PASSWORD='Password1'
 RESPONSE_FILE=response.txt
+
+#
+# Point to the minikube profile
+#
+eval $(minikube docker-env --profile curity)
+minikube profile curity
+if [ $? -ne 0 ]; then
+  echo "Minikube problem encountered - please ensure that the service is started"
+  exit 1
+fi
 
 #
 # Delete then recreate the index for Curity system logs
@@ -16,7 +34,7 @@ RESPONSE_FILE=response.txt
 cd resources
 echo 'Creating Elasticsearch system index template ...'
 curl -s -X DELETE "$ELASTIC_URL/curitysystem*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
-HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_template/curitysystem" \
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_index_template/curitysystem" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
 -d @indextemplate-curitysystem.json \
@@ -31,7 +49,7 @@ fi
 #
 echo 'Creating Elasticsearch request index template ...'
 curl -s -X DELETE "$ELASTIC_URL/curityrequest*" -u "$ELASTIC_USER:$ELASTIC_PASSWORD" -o /dev/null
-HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_template/curityrequest" \
+HTTP_STATUS=$(curl -s -X PUT "$ELASTIC_URL/_index_template/curityrequest" \
 -u "$ELASTIC_USER:$ELASTIC_PASSWORD" \
 -H 'Content-Type: application/json' \
 -d @indextemplate-curityrequest.json \
@@ -74,7 +92,7 @@ fi
 #
 cd ../filebeat
 kubectl delete -f ./filebeat-kubernetes.yaml 2>/dev/null
-kubectl apply -f ./filebeat-kubernetes.yaml
+kubectl apply  -f ./filebeat-kubernetes.yaml
 if [ $? -ne 0 ];
 then
   echo 'Problem encountered applying filebeat configuration'

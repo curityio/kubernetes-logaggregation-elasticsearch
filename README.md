@@ -15,18 +15,65 @@ The following Elastic components are used:
 ## Prerequisites
 
 Clone the [Kubernetes Quick Start GitHub repository](https://github.com/curityio/kubernetes-quick-start) and deploy the base system, following the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/).\
-When creating the cluster, ensure sufficient resources for the Elastic components by using these values:
 
-```bash
-minikube start --cpus=4 --memory=16384 --disk-size=50g --driver=hyperkit --profile curity
+## Configuration Updates
+
+Once working, edit the `helm-values.yaml` file to activate tailing of request logs:
+
+```yaml
+  runtime:
+    logging:
+      image: "busybox:latest"
+      level: INFO
+      stdout: true
+      logs:
+      - request
+#        - audit
+#        - cluster
+#        - confsvc
+#        - confsvc-internal
+#        - post-commit-scripts
 ```
 
-Also use the `helm-values.yaml` and `log4j2.xml` files from this repository when deploying the base system.
+Also update the appenders in the `log4j2.xml` file to use JSONLayout, replacing the default PatternLayout.\
+Each log entry is then a bare JSON line that log shippers can easily consume.
+
+```xml
+<Appenders>
+    <Console name="stdout" target="SYSTEM_OUT">
+        <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+            <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
+            <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+        </JSONLayout>
+        <filters>
+            <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <MarkerFilter marker="EXTENDED_REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
+        </filters>
+    </Console>
+    <RollingFile name="request-log" fileName="${env:IDSVR_HOME}/var/log/request.log"
+                    filePattern="${env:IDSVR_HOME}/var/log/request.log.%i.gz">
+        <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
+            <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
+            <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+        </JSONLayout>
+        <Policies>
+            <SizeBasedTriggeringPolicy size="10MB"/>
+        </Policies>
+        <DefaultRolloverStrategy max="5"/>
+        <filters>
+            <MarkerFilter marker="EXTENDED_REQUEST" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+            <MarkerFilter marker="REQUEST" onMatch="ACCEPT" onMismatch="DENY"/>
+        </filters>
+    </RollingFile>
+</Appenders>
+```
+
+Next re-run the `deploy-idsvr.sh` script, to apply the above settings.
 
 ## Deploy Elastic Components
 
 Run `minikube ip --profile curity` to get the virtual machine's IP address.\
-Then add these domains against the IP address in the `hosts` file on the local computer:
+Ensure that Elasticsearch related domain names are mapped to the IP address in the `hosts` file on the local computer:
 
 ```bash
 192.168.64.3   login.curity.local admin.curity.local api.elastic.local elastic.local
