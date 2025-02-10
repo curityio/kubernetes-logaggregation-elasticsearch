@@ -2,24 +2,11 @@
 
 Demonstrates how to aggregate logs from the Curity Identity Server and then query results.
 
-## Components
+## Prepare the Curity Identity Server
 
-The following Elastic components are used:
-
-| Component | URL | Behavior |
-| --------- | --- | -------- |
-| Elasticsearch | http://api.elastic.local | The main Elasticsearch component including API and data storage |
-| Kibana | http://elastic.local | A Browser UI for querying logs for the whole cluster field by field |
-| Filebeat | N/A | A component that ships JSON logs to the Elasticsearch API |
-
-## Prerequisites
-
-First follow the [Tutorial Documentation](https://curity.io/resources/learn/kubernetes-demo-installation/) to deploy the base system using minikube.\
-This uses the [Kubernetes Quick Start](https://github.com/curityio/kubernetes-quick-start) repository, which requires some updates.
-
-## Configuration Updates
-
-Once the base setup is working, edit the `helm-values.yaml` file to activate tailing of request logs:
+Prepare a base cluster such as the `Curity Identity Server` deployment from the [Kubernetes Training](https://github.com/curityio/kubernetes-quick-start) repository.\
+Before running the deployment, update the Helm `values.yaml` file to create extra sidecars to tail logs.\
+The following example does so for request logs written to file on the Curity Identity Server runtime containers.
 
 ```yaml
   runtime:
@@ -36,8 +23,7 @@ Once the base setup is working, edit the `helm-values.yaml` file to activate tai
 #        - post-commit-scripts
 ```
 
-Also update the appenders in the `log4j2.xml` file to use JSONLayout, replacing the default PatternLayout.\
-Each log entry is then a bare JSON line that log shippers can easily consume.
+Also update appenders in the `log4j2.xml` file to use JSONLayout, replacing the default PatternLayout.
 
 ```xml
 <Appenders>
@@ -46,10 +32,7 @@ Each log entry is then a bare JSON line that log shippers can easily consume.
             <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
             <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
         </JSONLayout>
-        <filters>
-            <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
-            <MarkerFilter marker="EXTENDED_REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
-        </filters>
+        ...
     </Console>
     <RollingFile name="request-log" fileName="${env:IDSVR_HOME}/var/log/request.log"
                     filePattern="${env:IDSVR_HOME}/var/log/request.log.%i.gz">
@@ -57,28 +40,12 @@ Each log entry is then a bare JSON line that log shippers can easily consume.
             <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
             <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
         </JSONLayout>
-        <Policies>
-            <SizeBasedTriggeringPolicy size="10MB"/>
-        </Policies>
-        <DefaultRolloverStrategy max="5"/>
-        <filters>
-            <MarkerFilter marker="EXTENDED_REQUEST" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
-            <MarkerFilter marker="REQUEST" onMatch="ACCEPT" onMismatch="DENY"/>
-        </filters>
+        ...
     </RollingFile>
 </Appenders>
 ```
 
-Next re-run the `deploy-idsvr.sh` script, to apply the above settings.
-
 ## Deploy Elastic Components
-
-Run `minikube ip --profile curity` to get the virtual machine's IP address.\
-Ensure that Elasticsearch related domain names are mapped to the IP address in the `hosts` file on the local computer:
-
-```bash
-192.168.64.3   login.curity.local admin.curity.local api.elastic.local elastic.local
-```
 
 Run the first script to deploy Elasticsearch and Kibana:
 
@@ -86,16 +53,38 @@ Run the first script to deploy Elasticsearch and Kibana:
 ./1-deploy-elastic.sh
 ```
 
-Then run the second script to deploy log shipping configurations and then the filebeat component:
+Then run the second script to deploy log shipping configurations and then the Filebeat component:
 
 ```bash
 ./2-deploy-log-shipping.sh
 ```
 
+By default the scripts expose components from the cluster at the following URLs:
+
+- Kibana runs at `http://elastic.local`
+- Elasticsearch runs at `http://api.elastic.local`
+
+To make these URLs resolvable, get the external IP address:
+
+```bash
+kubectl get svc -A
+```
+
+Then add domains to the local computer's `/etc/hosts` file:
+
+```text
+172.20.0.5 elastic.local api.elastic.local
+```
+
 ## Query Curity Logs
 
-Run an example app to generate logs, then navigate to the [Kibana System](http://elastic.local/app/dev_tools#/console).\
-Sign in as `elastic / Password1` then query logs across all runtime nodes field by field:
+Sign in and access the Kibana DevTools using these URLs:
+
+- URL: http://elastic.local/app/dev_tools#/console
+- User: elastic
+- Password: Password1
+
+Then use queries to analyze logs from all runtime workloads of the Curity Identity Server:
 
 ```sql
 POST _sql?format=txt
@@ -106,24 +95,10 @@ POST _sql?format=txt
 
 ![Initial Query](/images/example-query.png)
 
-You can also connect to the Elasticsearch API via REST request to query data by schema:
-
-```bash
-curl -u 'elastic:Password1' http://api.elastic.local/curitysystem/_search | jq
-```
-
 ## Documentation
 
-- See the [Logging Best Practices](https://curity.io/resources/learn/logging-best-practices) article for the recommended techniques
-- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for a walkthrough of using this GitHub repository
-
-## Free Resources
-
-Run the following command to tear down the Kubernetes cluster and free all resources:
-
-```bash
-minikube delete --profile curity
-```
+- See the [Logging Best Practices](https://curity.io/resources/learn/logging-best-practices) article for details on techniques
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for further information about Elasticsearch integration
 
 ## More Information
 
