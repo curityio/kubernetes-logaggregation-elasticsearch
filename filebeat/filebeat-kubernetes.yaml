@@ -39,7 +39,6 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: filebeat
-  namespace: default
   labels:
     k8s-app: filebeat
 spec:

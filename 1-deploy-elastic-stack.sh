@@ -2,7 +2,6 @@
 
 #################################################################################
 # Deploy Elastic Stack base components to an existing Kubernetes minikube cluster
-# This simple setup destroys all existing data whenever this script is run
 #################################################################################
 
 #
