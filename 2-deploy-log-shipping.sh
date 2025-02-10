@@ -19,16 +19,6 @@ ELASTIC_PASSWORD='Password1'
 RESPONSE_FILE=response.txt
 
 #
-# Point to the minikube profile
-#
-eval $(minikube docker-env --profile curity)
-minikube profile curity
-if [ $? -ne 0 ]; then
-  echo "Minikube problem encountered - please ensure that the service is started"
-  exit 1
-fi
-
-#
 # Create the index for Curity system logs
 #
 cd resources
@@ -89,8 +79,8 @@ fi
 # https://raw.githubusercontent.com/elastic/beats/7.15/deploy/kubernetes/filebeat-kubernetes.yaml
 #
 cd ../filebeat
-kubectl delete -f ./filebeat-kubernetes.yaml 2>/dev/null
-kubectl apply  -f ./filebeat-kubernetes.yaml
+kubectl -n elasticstack delete -f ./filebeat-kubernetes.yaml 2>/dev/null
+kubectl -n elasticstack apply  -f ./filebeat-kubernetes.yaml
 if [ $? -ne 0 ];
 then
   echo 'Problem encountered applying filebeat configuration'

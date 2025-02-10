@@ -67,7 +67,7 @@ By default the scripts expose components from the cluster at the following URLs:
 To make these URLs resolvable, get the external IP address:
 
 ```bash
-kubectl get svc -A
+kubectl get svc -n apigateway
 ```
 
 Then add domains to the local computer's `/etc/hosts` file:

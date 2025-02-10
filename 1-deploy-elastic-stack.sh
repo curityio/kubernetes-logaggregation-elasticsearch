@@ -10,6 +10,14 @@
 #
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+
+curl -u "elastic:Password1" "http://api.elastic.local/_security/user/kibana_system/_password" \
+-u "elastic:Password1" \
+-H "content-type: application/json" \
+-d "{\"password\":\"Password1\"}" \
+-o /dev/null \
+-w '%{http_code}'
+
 #
 # API connection details
 #
@@ -21,51 +29,22 @@ KIBANA_SYSTEM_PASSWORD='Password1'
 RESPONSE_FILE=response.txt
 
 #
-# Point to our minikube profile
+# First create the namespace
 #
-eval $(minikube docker-env --profile curity)
-minikube profile curity
-if [ $? -ne 0 ]; then
-  echo "Minikube problem encountered - please ensure that the service is started"
-  exit 1
-fi
+kubectl create namespace elasticstack 2>/dev/null
 
 #
-# At the time of writing there is a minikube 1.26+ timeout issue with large repos
-# Therefore pre-pull them to workaround this problem
-# https://github.com/kubernetes/minikube/issues/14806
+# Deploy services
 #
-minikube ssh docker pull docker.elastic.co/elasticsearch/elasticsearch:8.4.3
-minikube ssh docker pull docker.elastic.co/kibana/kibana:8.4.3
-minikube ssh docker pull docker.elastic.co/beats/filebeat:8.4.3
+kubectl -n elasticstack apply -f elastic/service.yaml
+kubectl -n elasticstack apply -f kibana/service.yaml
 
 #
-# Deploy Elastic Search in a basic single node setup and expose it over port 80
+# Deploy ingress resources
 #
-cd elastic
-kubectl delete -f service.yaml 2>/dev/null
-kubectl apply  -f service.yaml
-if [ $? -ne 0 ];
-then
-  echo 'Problem encountered applying ElasticSearch service'
-  exit 1
-fi
-kubectl delete -f ingress.yaml 2>/dev/null
-kubectl apply  -f ingress.yaml
-
-#
-# Deploy Kibana and expose it over port 80
-#
-cd ../kibana
-kubectl delete -f service.yaml 2>/dev/null
-kubectl apply  -f service.yaml
-if [ $? -ne 0 ];
-then
-  echo 'Problem encountered applying ElasticSearch service'
-  exit 1
-fi
-kubectl delete -f ingress.yaml 2>/dev/null
-kubectl apply  -f ingress.yaml
+kubectl -n apigateway   apply -f gateway/gateway.yaml
+kubectl -n elasticstack apply -f elastic/ingress.yaml
+kubectl -n elasticstack apply -f kibana/ingress.yaml
 
 #
 # Wait for the Elasticsearch service

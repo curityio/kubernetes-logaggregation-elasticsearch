@@ -1,21 +1,21 @@
 #
 # Expose Kibana over port 80 on the URL http://elastic.local
-# This domain name must be added to the local computer's hosts file
 #
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: kibana-ingress
+  name: kibana-route
 spec:
+  parentRefs:
+  - name: http-gateway
+    namespace: apigateway
+  hostnames:
+  - elastic.local
   rules:
-    - host: elastic.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: kibana-svc
-                port:
-                  number: 5601
+  - matches:
+    - path:
+        value: /
+    backendRefs:
+    - name: kibana-svc
+      kind: Service
+      port: 5601
