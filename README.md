@@ -4,7 +4,7 @@ Demonstrates how to aggregate logs from the Curity Identity Server and then quer
 
 ## Prepare the Curity Identity Server
 
-Prepare a base cluster such as the `Curity Identity Server` deployment from the [Kubernetes Training](https://github.com/curityio/kubernetes-quick-start) repository.\
+Prepare a base cluster like the `Curity Identity Server` example from the [Kubernetes Training](https://github.com/curityio/kubernetes-quick-start) repository.\
 Before running the deployment, update the Helm `values.yaml` file to create extra sidecars to tail logs.\
 The following example does so for request logs written to file on the Curity Identity Server runtime containers.
 
