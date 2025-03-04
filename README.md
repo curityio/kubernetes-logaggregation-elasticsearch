@@ -9,7 +9,7 @@ All logs include OpenTelemetry trace and span IDs:
 
 ## Prerequisites
 
-Start with base deployments such as the following examples:
+Start with base deployments such as the following examples.
 
 - The [Curity Identity Server](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#3---curity-identity-server-example) example deployment from the Kubernetes Training repository.
 - The [Curity Token Handler](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#4---curity-token-handler-example) example deployment from the Kubernetes Training repository.
@@ -17,7 +17,7 @@ Start with base deployments such as the following examples:
 ## 1. Configure Outgoing Logging from the Curity Identity Server
 
 Before deploying the Curity product, edit the [log4j2.xml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/log4j2.xml) file and activate a JSON layout for the system, request and audit logs.\
-Also remove the default layouts so that appenders look similar to this:
+Also remove the default layouts so that appenders look similar to the following.
 
 ```xml
 <Appenders>
@@ -33,7 +33,7 @@ Also remove the default layouts so that appenders look similar to this:
 ```
 
 Next activate sidecar containers to tail request and audit log files to write them to Kubernetes nodes, ready for log shipping.\
-Do so by updating the Helm chart [values.yaml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/values.yaml) file:
+Do so by updating the Helm chart [values.yaml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/values.yaml) file.
 
 ```yaml
 curity:
@@ -50,7 +50,7 @@ curity:
 
 ## 2. Configure Incoming Logging into Elastic Search
 
-In Elasticsearch, index templates define storage of logging events as type-safe JSON documents:
+In Elasticsearch, index templates define storage of logging events as type-safe JSON documents.
 
 - [System Logs Index Template](logs/ingestion/indextemplate-curity-system.json)
 - [Request Logs Index Template](logs/ingestion/indextemplate-curity-request.json)
@@ -108,7 +108,7 @@ To make the URL resolvable, get the API gateway's external IP address:
 kubectl get svc -n apigateway
 ```
 
-Then map the Kibana hostname to any other entries for that IP address in the local computer's `/etc/hosts` file:
+Then map the Kibana hostname to any other entries for that IP address in the local computer's `/etc/hosts` file.
 
 ```text
 172.20.0.5 logs.testcluster.example
@@ -116,14 +116,14 @@ Then map the Kibana hostname to any other entries for that IP address in the loc
 
 ## 5. Run Live Analysis
 
-Sign in to Kibana using the following credentials:
+Sign in to Kibana with the following details and access log data from Dev Tools.
 
 - URL: `https://logs.testcluster.example/app/dev_tools#/console`
 - User: elastic
 - Password: Password1
 
-Then access logs in close to real time, to enable the best troubleshooting and analysis.\
-For example, run Lucene or SQL queries to operate on the log data and filter on fields in the JSON log data:
+Use logs in close to real time, to enable the best troubleshooting and analysis.\
+For example, run Lucene or SQL queries to operate on the log data and filter on fields in the JSON log data.
 
 ```bash
 GET curity-system*/_search
