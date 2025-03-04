@@ -1,6 +1,7 @@
 # Curity Identity Server Log Aggregation to Elastic Search
 
-An example repository to demonstrate aggregation of the following logs and to include OpenTelemetry trace and span IDs:
+Demonstrate aggregation of the following logs to Elasticsearch.\
+All logs include OpenTelemetry trace and span IDs:
 
 - System logs
 - Request logs

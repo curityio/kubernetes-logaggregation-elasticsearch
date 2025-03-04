@@ -9,8 +9,8 @@ data:
     filebeat.inputs:
     - type: container
       paths:
-        - /var/log/containers/curity-idsvr-runtime*curity-idsvr-runtime*.log
-        - /var/log/containers/tokenhandler-runtime*curity-idsvr-runtime*.log
+        - /var/log/containers/curity-idsvr-runtime*runtime*.log
+        - /var/log/containers/tokenhandler-runtime*-runtime*.log
       json:
         keys_under_root: true
         add_error_key: false
@@ -18,8 +18,8 @@ data:
         logtype: 'system'
     - type: container
       paths:
-        - /var/log/containers/curity-idsvr-runtime*curity_request*.log
-        - /var/log/containers/tokenhandler-runtime*curity_request*.log
+        - /var/log/containers/curity-idsvr-runtime*request*.log
+        - /var/log/containers/tokenhandler-runtime*request*.log
       json:
         keys_under_root: true
         add_error_key: false
@@ -27,8 +27,7 @@ data:
         logtype: 'request'
     - type: container
       paths:
-        - /var/log/containers/curity-idsvr-runtime*curity_audit*.log
-        - /var/log/containers/tokenhandler-runtime*curity_audit*.log
+        - /var/log/containers/curity-idsvr-runtime*audit*.log
       json:
         keys_under_root: true
         add_error_key: false
