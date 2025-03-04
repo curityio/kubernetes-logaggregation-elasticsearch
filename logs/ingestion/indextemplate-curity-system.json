@@ -36,8 +36,10 @@
           "type": "object",
           "enabled": false
         },
-        "contextMap": {
-          "properties" : {
+        "contextMap":
+        {
+          "properties":
+          {
             "RequestId": 
             {
               "type": "keyword"

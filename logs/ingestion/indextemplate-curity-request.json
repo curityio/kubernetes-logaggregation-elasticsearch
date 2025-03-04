@@ -32,8 +32,10 @@
         "threadPriority": {
           "type": "integer"
         },
-        "http": {
-          "properties" : {
+        "http":
+        {
+          "properties":
+          {
             "client": 
             {
               "type": "keyword"
@@ -92,8 +94,10 @@
             }
           }
         },
-        "contextMap": {
-          "properties" : {
+        "contextMap":
+        {
+          "properties":
+          {
             "RequestId": 
             {
               "type": "keyword"

@@ -88,14 +88,6 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Script processors are tricky to manage via the REST API because the script must be flattened to a single line.
-# So get the ingest pipeline script processor's code into a single line and write '\n' literal characters.
-#
-SCRIPTSOURCE=$(awk '{printf "\\\\n%s", $0}' script-processor.txt)
-INGEST_PIPELINE_JSON=$(cat ingest-pipeline-template.json | sed s/SCRIPTSOURCE/"$SCRIPTSOURCE"/g)
-echo "$INGEST_PIPELINE_JSON" > ingest-pipeline.json
-
-#
 # Delete then recreate the Curity ingest pipeline to control receiving data
 #
 echo 'Creating the Elasticsearch ingest pipeline ...'

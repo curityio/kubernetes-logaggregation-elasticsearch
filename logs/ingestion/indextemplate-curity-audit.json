@@ -32,8 +32,10 @@
         "threadPriority": {
           "type": "integer"
         },
-        "audit": {
-          "properties" : {
+        "audit":
+        {
+          "properties":
+          {
             "type": 
             {
               "type": "keyword"
@@ -76,8 +78,10 @@
             }
           }
         },
-        "contextMap": {
-          "properties" : {
+        "contextMap":
+        {
+          "properties":
+          {
             "RequestId": 
             {
               "type": "keyword"

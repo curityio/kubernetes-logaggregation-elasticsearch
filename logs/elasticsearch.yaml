@@ -41,6 +41,8 @@ spec:
               value: 'Password1'
             - name: ES_JAVA_OPTS
               value: -Xmx4g
+            - name: script.painless.regex.enabled
+              value: 'true'
 ---
 apiVersion: batch/v1
 kind: Job

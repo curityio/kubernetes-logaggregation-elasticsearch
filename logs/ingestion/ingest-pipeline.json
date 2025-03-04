@@ -1,20 +1,30 @@
+{
+  "description": "Curity Logs Ingest Pipeline",
+  "processors": [
+    {
+      "script": {
+        "lang": "painless",
+        "description": "Transform incoming data",
+        "source": "
 if (ctx['logtype'] == 'request') {
 
   String message = ctx['message'];
   String[] fieldPairs = message.splitOnToken(' ');
 
   Map http = [:];
-  for (int i = 0; i< fieldPairs.length; i++) { 
+  for (int i = 0; i< fieldPairs.length; i++) {
+
     String[] parts = fieldPairs[i].splitOnToken('=');
     if (parts.length == 2) {
       String value = parts[1];
+      
       if (value.length() >= 2) {
         value = value.substring(1, value.length() - 1);
       }
-      String trimmedValue = value;
-      http[parts[0]] = trimmedValue;
+      http[parts[0]] = value;
     }
   }
+
   ctx['http'] = http;
   ctx['message'] = '';
 }
@@ -22,23 +32,34 @@ if (ctx['logtype'] == 'request') {
 if (ctx['logtype'] == 'audit') {
 
   String message = ctx['message'];
-  String[] fieldPairs = message.splitOnToken(' ');
-  
+
   Map audit = [:];
-  audit['type'] = fieldPairs[0];
+  audit['type'] = message.splitOnToken(' ')[0];
+
+  String[] fieldPairs = message.splitOnToken(' ');
   audit['id'] = fieldPairs[1].substring(1, fieldPairs[1].length() - 1);
   
-  for (int i = 2; i< fieldPairs.length; i++) { 
+  for (int i = 2; i< fieldPairs.length; i++) {
+
     String[] parts = fieldPairs[i].splitOnToken('=');
     if (parts.length == 2) {
       String value = parts[1];
+      
       if (value.length() >= 2) {
         value = value.substring(1, value.length() - 1);
       }
-      String trimmedValue = value;
-      audit[parts[0]] = trimmedValue;
+      audit[parts[0]] = value;
     }
   }
+
   ctx['audit'] = audit;
   ctx['message'] = '';
+}"
+      },
+      "remove": {
+        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields"],
+        "ignore_missing": true
+      }
+    }
+  ]
 }
