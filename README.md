@@ -1,7 +1,6 @@
 # Curity Identity Server Log Aggregation to Elastic Search
 
-Demonstrate aggregation of the following logs to Elasticsearch.\
-All logs include OpenTelemetry trace and span IDs:
+Demonstrate aggregation of the following logs to Elasticsearch, where logs include OpenTelemetry trace and span IDs.
 
 - System logs
 - Request logs
@@ -9,21 +8,20 @@ All logs include OpenTelemetry trace and span IDs:
 
 ## Prerequisites
 
-Start with base deployments such as the following examples.
+Start with base deployments such as the following examples from the Kubernetes Training repository.
 
-- The [Curity Identity Server](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#3---curity-identity-server-example) example deployment from the Kubernetes Training repository.
-- The [Curity Token Handler](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#4---curity-token-handler-example) example deployment from the Kubernetes Training repository.
+- The [Curity Identity Server](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#3---curity-identity-server-example) example deployment.
+- The [Curity Token Handler](https://github.com/curityio/kubernetes-training?tab=readme-ov-file#4---curity-token-handler-example) example deployment.
 
 ## 1. Configure Outgoing Logging from the Curity Identity Server
 
-Before deploying the Curity product, edit the [log4j2.xml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/log4j2.xml) file and activate a JSON layout for the system, request and audit logs.\
-Also remove the default layouts so that appenders look similar to the following.
+Before deploying the Curity product, edit the [log4j2.xml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/log4j2.xml) file.\
+Activate JSON layouts for the system, request and audit logs and remove default layouts.
 
 ```xml
 <Appenders>
     <Console name="stdout" target="SYSTEM_OUT">
         <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
-            <KeyValuePair key="logtype" value="system" />
             <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
             <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
         </JSONLayout>
@@ -32,7 +30,7 @@ Also remove the default layouts so that appenders look similar to the following.
 <Appenders>
 ```
 
-Next activate sidecar containers to tail request and audit log files to write them to Kubernetes nodes, ready for log shipping.\
+Use sidecar containers to tail request and audit log files to write them to Kubernetes nodes, ready for log shipping.\
 Do so by updating the Helm chart [values.yaml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/values.yaml) file.
 
 ```yaml
@@ -56,13 +54,13 @@ In Elasticsearch, index templates define storage of logging events as type-safe 
 - [Request Logs Index Template](logs/ingestion/indextemplate-curity-request.json)
 - [Audit Logs Index Template](logs/ingestion/indextemplate-curity-audit.json)
 
-An [ingest pipeline](logs/ingestion/ingest-pipeline-template.json) uses some [scripting](logs/ingestion/script-processor.txt) to ensure clean JSON log data.\
-A Kubernetes job runs a [script](logs/initdata.sh) to import these resources into Elasticsearch.
+An [ingest pipeline](logs/ingestion/ingest-pipeline-template.json) ensures that Elasticsearch saves clean JSON log data.\
+A Kubernetes job runs a [script](logs/initdata.sh) to create the index templates and the ingestion pipeline.
 
 ## 3. Configure Log Shipping
 
 The Filebeat log shipper reads log files from the `/var/log/containers` folder on Kubernetes nodes.\
-The log shipper uploads logging events and determines the Elasticsearch index based on the file path.\
+The log shipper uploads logging events and determines the Elasticsearch index from the file path.\
 The following partial configuration shows the approach.
 
 ```yaml
@@ -88,16 +86,15 @@ output.elasticsearch:
 
 ## 4. Deploy Elastic Stack Components
 
-If you use the example deployments referenced at the top of this page, run the following script to extend the system.\
-Alternatively, adapt the scripting to match your own cluster.
+If you use the example deploymenta, run the following script to deploy log aggregation components.\
+Alternatively, adapt the scripting to match your own deployments.
 
 ```bash
 ./deploy-elastic-stack.sh
 ```
 
-The script adds a demo deployment of Elasticsearch, Kibana and Filebeat to the Kubernetes cluster:
-An external URL for Kibana runs at `https://logs.testcluster.example`.\
-To make the URL resolvable, get the API gateway's external IP address:
+The script runs a demo deployment of Elasticsearch, Kibana and Filebeat, then exposes Kibana at `https://logs.testcluster.example`.\
+To make the URL resolvable, get the API gateway's external IP address.
 
 ```bash
 kubectl get svc -n apigateway
@@ -129,7 +126,7 @@ GET curity-audit*/_search
 ## Documentation
 
 - See the [Logging Best Practices](https://curity.io/resources/learn/logging-best-practices) article to learn more about Curity Identity Server logs.
-- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for a summary of Elasticsearch integration.
+- See the [Elasticsearch Tutorial](https://curity.io/resources/learn/log-to-elasticsearch) for a summary of the Elasticsearch integration.
 
 ## More Information
 
