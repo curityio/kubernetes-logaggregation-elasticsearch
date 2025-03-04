@@ -1,6 +1,6 @@
 # Curity Identity Server Log Aggregation to Elastic Search
 
-Demonstrate aggregation of the following logs to Elasticsearch, where logs include OpenTelemetry trace and span IDs.
+Aggregates the following logs to Elasticsearch, where logs include OpenTelemetry trace and span IDs.
 
 - System logs
 - Request logs
@@ -54,7 +54,7 @@ In Elasticsearch, index templates define storage of logging events as type-safe 
 - [Request Logs Index Template](logs/ingestion/indextemplate-curity-request.json)
 - [Audit Logs Index Template](logs/ingestion/indextemplate-curity-audit.json)
 
-An [ingest pipeline](logs/ingestion/ingest-pipeline-template.json) ensures that Elasticsearch saves clean JSON log data.\
+An [ingest pipeline](logs/ingestion/ingest-pipeline.json) ensures that Elasticsearch saves clean JSON log data.\
 A Kubernetes job runs a [script](logs/initdata.sh) to create the index templates and the ingestion pipeline.
 
 ## 3. Configure Log Shipping
@@ -86,21 +86,22 @@ output.elasticsearch:
 
 ## 4. Deploy Elastic Stack Components
 
-If you use the example deploymenta, run the following script to deploy log aggregation components.\
+If you use the example deployment, run the following script to deploy log aggregation components.\
 Alternatively, adapt the scripting to match your own deployments.
 
 ```bash
 ./deploy-elastic-stack.sh
 ```
 
-The script runs a demo deployment of Elasticsearch, Kibana and Filebeat, then exposes Kibana at `https://logs.testcluster.example`.\
+The script runs a demo deployment of Elasticsearch, Kibana and Filebeat.\
+The Kibana frontend uses an external URL of `https://logs.testcluster.example`.\
 To make the URL resolvable, get the API gateway's external IP address.
 
 ```bash
 kubectl get svc -n apigateway
 ```
 
-Then map the Kibana hostname to any other entries for that IP address in the local computer's `/etc/hosts` file.
+Then add the Kibana hostname to any other entries for that IP address in the local computer's `/etc/hosts` file.
 
 ```text
 172.20.0.5 logs.testcluster.example
@@ -115,7 +116,7 @@ Sign in to Kibana with the following details and access log data from Dev Tools.
 - Password: Password1
 
 Use logs in close to real time, to enable the best troubleshooting and analysis.\
-For example, run Lucene or SQL queries to operate on the log data and filter on fields in the JSON log data.
+For example, run Lucene or SQL queries to query these indexes and operate on JSON log data.
 
 ```bash
 GET curity-system*/_search
