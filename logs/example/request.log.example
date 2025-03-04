@@ -1,0 +1,22 @@
+{
+  "instant": {
+    "epochSecond": 1741086185,
+    "nanoOfSecond": 492563450
+  },
+  "thread": "req-175",
+  "level": "INFO",
+  "loggerName": "se.curity.identityserver.app.RequestReceiver",
+  "marker": {
+    "name": "REQUEST"
+  },
+  "message": "accept=\"application/json\" content-type=\"application/json\" duration=\"47\" lang=\"\" method=\"POST\" params=\"\" protocol=\"HTTP/1.1\" secure=\"false\" size=\"192\" status=\"200\" uri=\"/oauth/v2/oauth-token\"",
+  "endOfBatch": true,
+  "loggerFqcn": "org.apache.logging.log4j.spi.AbstractLogger",
+  "contextMap": {
+    "RequestId": "G7p261hy"
+  },
+  "threadId": 42,
+  "threadPriority": 5,
+  "hostname": "curity-idsvr-runtime-65bddfd64f-jxtxm",
+  "timestamp": "2025-03-04T11:03:05.492+0000"
+}

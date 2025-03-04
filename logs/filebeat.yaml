@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: filebeat
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: filebeat-config
@@ -14,22 +9,43 @@ data:
     filebeat.inputs:
     - type: container
       paths:
-        - /var/log/containers/curity-idsvr-runtime*.log
+        - /var/log/containers/curity-idsvr-runtime*curity-idsvr-runtime*.log
+        - /var/log/containers/tokenhandler-runtime*curity-idsvr-runtime*.log
       json:
         keys_under_root: true
         add_error_key: false
+      fields:
+        logtype: 'system'
+    - type: container
+      paths:
+        - /var/log/containers/curity-idsvr-runtime*curity_request*.log
+        - /var/log/containers/tokenhandler-runtime*curity_request*.log
+      json:
+        keys_under_root: true
+        add_error_key: false
+      fields:
+        logtype: 'request'
+    - type: container
+      paths:
+        - /var/log/containers/curity-idsvr-runtime*curity_audit*.log
+        - /var/log/containers/tokenhandler-runtime*curity_audit*.log
+      json:
+        keys_under_root: true
+        add_error_key: false
+      fields:
+        logtype: 'audit'
 
     output.elasticsearch:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
-      index: "curitysystem-%{+yyyy.MM.dd}"
+      index: "curity-%{[fields.logtype]:system}-%{+yyyy.MM.dd}"
       pipelines:
       - pipeline: curity-ingest-pipeline
 
     setup.ilm.enabled: false
-    setup.template.name: curitysystem
-    setup.template.pattern: curitysystem-*
+    setup.template.name: curity
+    setup.template.pattern: curity-*
 
     processors:
     - drop_fields:
@@ -50,10 +66,9 @@ spec:
       labels:
         k8s-app: filebeat
     spec:
-      serviceAccountName: filebeat
       containers:
       - name: filebeat
-        image: docker.elastic.co/beats/filebeat:8.17.1
+        image: docker.elastic.co/beats/filebeat:8.17.2
         args: [
           "-c", "/etc/filebeat.yml",
           "-e",

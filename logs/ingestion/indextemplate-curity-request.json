@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["curityrequest*"],
+  "index_patterns": ["curity-request*"],
   "template": {
     "mappings": 
     {
@@ -103,6 +103,14 @@
               "type": "keyword"
             },
             "LongSessionId": 
+            {
+              "type": "keyword"
+            },
+            "TraceId": 
+            {
+              "type": "keyword"
+            },
+            "SpanId": 
             {
               "type": "keyword"
             }
