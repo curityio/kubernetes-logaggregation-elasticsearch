@@ -12,7 +12,7 @@ if (ctx['logtype'] == 'request') {
   String[] fieldPairs = message.splitOnToken(' ');
 
   Map http = [:];
-  for (int i = 0; i< fieldPairs.length; i++) {
+  for (int i = 0; i < fieldPairs.length; i++) {
 
     String[] parts = fieldPairs[i].splitOnToken('=');
     if (parts.length == 2) {
@@ -36,19 +36,25 @@ if (ctx['logtype'] == 'audit') {
   Map audit = [:];
   audit['type'] = message.splitOnToken(' ')[0];
 
-  String[] fieldPairs = message.splitOnToken(' ');
-  audit['id'] = fieldPairs[1].substring(1, fieldPairs[1].length() - 1);
-  
-  for (int i = 2; i< fieldPairs.length; i++) {
+  int start = message.indexOf('[');
+  int end   = message.indexOf(']');
+  if (start >= 0 && end >= 0 && end > start) {
+    
+    String messageFieldText = message.substring(start + 1, end);
+    String[] fieldPairs = messageFieldText.splitOnToken(' ');
 
-    String[] parts = fieldPairs[i].splitOnToken('=');
-    if (parts.length == 2) {
-      String value = parts[1];
-      
-      if (value.length() >= 2) {
-        value = value.substring(1, value.length() - 1);
+    audit['id'] = fieldPairs[0];
+    for (int i = 1; i < fieldPairs.length; i++) {
+
+      String[] parts = fieldPairs[i].splitOnToken('=');
+      if (parts.length == 2) {
+        String value = parts[1];
+        
+        if (value.length() >= 2) {
+          value = value.substring(1, value.length() - 1);
+        }
+        audit[parts[0]] = value;
       }
-      audit[parts[0]] = value;
     }
   }
 
