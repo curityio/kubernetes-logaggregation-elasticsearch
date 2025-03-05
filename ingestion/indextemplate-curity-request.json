@@ -1,6 +1,7 @@
 {
   "index_patterns": ["curity-request*"],
-  "template": {
+  "template":
+  {
     "mappings": 
     {
       "properties": 

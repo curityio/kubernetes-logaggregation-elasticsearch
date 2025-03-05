@@ -50,12 +50,12 @@ curity:
 
 In Elasticsearch, index templates define storage of logging events as type-safe JSON documents.
 
-- [System Logs Index Template](logs/ingestion/indextemplate-curity-system.json)
-- [Request Logs Index Template](logs/ingestion/indextemplate-curity-request.json)
-- [Audit Logs Index Template](logs/ingestion/indextemplate-curity-audit.json)
+- [System Logs Index Template](ingestion/indextemplate-curity-system.json)
+- [Request Logs Index Template](ingestion/indextemplate-curity-request.json)
+- [Audit Logs Index Template](ingestion/indextemplate-curity-audit.json)
 
-An [ingest pipeline](logs/ingestion/ingest-pipeline.json) ensures that Elasticsearch saves clean JSON log data.\
-A Kubernetes job runs a [script](logs/initdata.sh) to create the index templates and the ingestion pipeline.
+An [ingest pipeline](ingestion/README.md) enables Elasticsearch to transform log data to clean JSON documents.\
+A Kubernetes job runs a [script](ingestion/initdata.sh) to create the index templates and the ingestion pipeline.
 
 ## 3. Configure Log Shipping
 
@@ -115,13 +115,20 @@ Sign in to Kibana with the following details and access log data from Dev Tools.
 - User: elastic
 - Password: Password1
 
-Use logs in close to real time, to enable the best troubleshooting and analysis.\
-For example, run Lucene or SQL queries to query these indexes and operate on JSON log data.
+For example, run Lucene or SQL queries on these indexes to operate on JSON log data.\
+You can quickly locate data by a field in the log schema, like an OpenTelemetry trace ID.
 
-```bash
+```text
 GET curity-system*/_search
-GET curity-request*/_search
-GET curity-audit*/_search
+{ 
+  "query":
+  {
+    "match":
+    {
+      "contextMap.TraceId": "ce41b85c6f00f167baa53fd814d23c30"
+    }
+  }
+}
 ```
 
 ## Documentation

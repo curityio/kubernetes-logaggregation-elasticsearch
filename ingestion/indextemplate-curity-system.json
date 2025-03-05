@@ -1,6 +1,7 @@
 {
-  "index_patterns": ["curity-audit*"],
-  "template": {
+  "index_patterns": ["curity-system*"],
+  "template":
+  {
     "mappings": 
     {
       "properties": 
@@ -32,51 +33,9 @@
         "threadPriority": {
           "type": "integer"
         },
-        "audit":
-        {
-          "properties":
-          {
-            "type": 
-            {
-              "type": "keyword"
-            },
-            "id": 
-            {
-              "type": "keyword"
-            },
-            "subject": 
-            {
-              "type": "keyword"
-            },
-            "client": 
-            {
-              "type": "keyword"
-            },
-            "resource": 
-            {
-              "type": "keyword"
-            },
-            "authenticatedSubject": 
-            {
-              "type": "keyword"
-            },
-            "authenticatedClient": 
-            {
-              "type": "keyword"
-            },
-            "acr": 
-            {
-              "type": "keyword"
-            },
-            "endpoint": 
-            {
-              "type": "keyword"
-            },
-            "session": 
-            {
-              "type": "keyword"
-            }
-          }
+        "thrown": {
+          "type": "object",
+          "enabled": false
         },
         "contextMap":
         {

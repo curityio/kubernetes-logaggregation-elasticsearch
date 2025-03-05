@@ -63,7 +63,7 @@ if (ctx['logtype'] == 'audit') {
 }"
       },
       "remove": {
-        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields"],
+        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields", "logtype"],
         "ignore_missing": true
       }
     }
