@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["*curity-request*"],
+  "index_patterns": ["curity-request-*"],
   "template":
   {
     "mappings": 

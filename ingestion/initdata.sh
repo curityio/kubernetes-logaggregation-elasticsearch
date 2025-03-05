@@ -5,7 +5,6 @@
 ######################################################################################
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
-cd ingestion
 
 ELASTICSEARCH_URL='http://elastic-svc:9200'
 ELASTICSEARCH_USER='elastic'
@@ -36,7 +35,6 @@ HTTP_STATUS=$(curl -k -s -X POST "$ELASTICSEARCH_URL/_security/user/$KIBANA_SYST
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered setting the Kibana system password: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
-  exit 1
 fi
 
 #
@@ -52,7 +50,6 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-syste
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the system logs index template: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
-  exit 1
 fi
 
 #
@@ -68,7 +65,6 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-reque
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the request logs index template: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
-  exit 1
 fi
 
 #
@@ -84,14 +80,12 @@ HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-audit
 if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Problem encountered creating the audit logs index template: $HTTP_STATUS"
   cat "$RESPONSE_FILE"
-  exit 1
 fi
 
 #
-# Delete then recreate the Curity ingest pipeline to control receiving data
+# Create the Curity ingest pipeline to control receiving data and fail the job on error
 #
 echo 'Creating the Elasticsearch ingest pipeline ...'
-curl -s -X DELETE "$ELASTICSEARCH_URL/_ingest/pipeline/curity-ingest-pipeline" -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" -o /dev/null
 HTTP_STATUS=$(curl -s -X PUT "$ELASTICSEARCH_URL/_ingest/pipeline/curity-ingest-pipeline" \
   -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" \
   -H 'Content-Type: application/json' \

@@ -15,8 +15,8 @@ Start with base deployments such as the following examples from the Kubernetes T
 
 ## 1. Configure Outgoing Logging from the Curity Identity Server
 
-Before deploying the Curity product, edit the [log4j2.xml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/log4j2.xml) file.\
-Activate JSON layouts for the system, request and audit logs and remove default layouts.
+Before deploying the Curity product, edit its [log4j2.xml](https://github.com/curityio/kubernetes-training/blob/main/resources/curity/idsvr-final/log4j2.xml) file.\
+Replace default layouts with JSON layouts for the system, request and audit logs.
 
 ```xml
 <Appenders>

@@ -6,44 +6,17 @@
         "lang": "painless",
         "description": "Transform incoming data",
         "source": "
-if (ctx['logtype'] == 'request') {
+def fields = ctx['fields'];
+if (fields != null) {
 
-  String message = ctx['message'];
-  String[] fieldPairs = message.splitOnToken(' ');
+  String logtype = fields['logtype'];
+  if (logtype == 'request') {
 
-  Map http = [:];
-  for (int i = 0; i < fieldPairs.length; i++) {
+    String message = ctx['message'];
+    String[] fieldPairs = message.splitOnToken(' ');
 
-    String[] parts = fieldPairs[i].splitOnToken('=');
-    if (parts.length == 2) {
-      String value = parts[1];
-      
-      if (value.length() >= 2) {
-        value = value.substring(1, value.length() - 1);
-      }
-      http[parts[0]] = value;
-    }
-  }
-
-  ctx['http'] = http;
-}
-
-if (ctx['logtype'] == 'audit') {
-
-  String message = ctx['message'];
-
-  Map audit = [:];
-  audit['type'] = message.splitOnToken(' ')[0];
-
-  int start = message.indexOf('[');
-  int end   = message.indexOf(']');
-  if (start >= 0 && end >= 0 && end > start) {
-    
-    String messageFieldText = message.substring(start + 1, end);
-    String[] fieldPairs = messageFieldText.splitOnToken(' ');
-
-    audit['id'] = fieldPairs[0];
-    for (int i = 1; i < fieldPairs.length; i++) {
+    Map http = [:];
+    for (int i = 0; i < fieldPairs.length; i++) {
 
       String[] parts = fieldPairs[i].splitOnToken('=');
       if (parts.length == 2) {
@@ -52,16 +25,50 @@ if (ctx['logtype'] == 'audit') {
         if (value.length() >= 2) {
           value = value.substring(1, value.length() - 1);
         }
-        audit[parts[0]] = value;
+        http[parts[0]] = value;
       }
     }
+
+    ctx['http'] = http;
+    ctx.remove('message');
   }
 
-  ctx['audit'] = audit;
+  if (logtype == 'audit') {
+
+    String message = ctx['message'];
+
+    Map audit = [:];
+    audit['type'] = message.splitOnToken(' ')[0];
+
+    int start = message.indexOf('[');
+    int end   = message.indexOf(']');
+    if (start >= 0 && end >= 0 && end > start) {
+      
+      String messageFieldText = message.substring(start + 1, end);
+      String[] fieldPairs = messageFieldText.splitOnToken(' ');
+
+      audit['id'] = fieldPairs[0];
+      for (int i = 1; i < fieldPairs.length; i++) {
+
+        String[] parts = fieldPairs[i].splitOnToken('=');
+        if (parts.length == 2) {
+          String value = parts[1];
+          
+          if (value.length() >= 2) {
+            value = value.substring(1, value.length() - 1);
+          }
+          audit[parts[0]] = value;
+        }
+      }
+    }
+
+    ctx['audit'] = audit;
+    ctx.remove('message');
+  }
 }"
       },
       "remove": {
-        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields", "logtype", "message"],
+        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields"],
         "ignore_missing": true
       }
     }
