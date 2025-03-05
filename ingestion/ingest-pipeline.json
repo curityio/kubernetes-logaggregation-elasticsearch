@@ -20,12 +20,17 @@ if (fields != null) {
 
       String[] parts = fieldPairs[i].splitOnToken('=');
       if (parts.length == 2) {
-        String value = parts[1];
         
+        String key = parts[0];
+        String value = parts[1];
         if (value.length() >= 2) {
           value = value.substring(1, value.length() - 1);
         }
-        http[parts[0]] = value;
+        if (key == 'duration' || key == 'size' || key == 'status') {
+          http[key] = Integer.parseInt(value);
+        } else {
+          http[key] = value;
+        }
       }
     }
 
@@ -52,12 +57,13 @@ if (fields != null) {
 
         String[] parts = fieldPairs[i].splitOnToken('=');
         if (parts.length == 2) {
+
+          String key = parts[0];  
           String value = parts[1];
-          
           if (value.length() >= 2) {
             value = value.substring(1, value.length() - 1);
           }
-          audit[parts[0]] = value;
+          audit[key] = value;
         }
       }
     }
