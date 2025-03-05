@@ -38,7 +38,7 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
-      index: "curity-%{[fields.logtype]}-%{+yyyy.MM.dd}"
+      index: "curity-%{[fields.logtype]}"
       pipelines:
       - pipeline: curity-ingest-pipeline
 

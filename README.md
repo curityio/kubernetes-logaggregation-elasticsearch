@@ -79,7 +79,7 @@ output.elasticsearch:
   hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
   username: ${ELASTICSEARCH_USERNAME}
   password: ${ELASTICSEARCH_PASSWORD}
-  index: "curity-%{[fields.logtype]}-%{+yyyy.MM.dd}"
+  index: "curity-%{[fields.logtype]}"
   pipelines:
   - pipeline: curity-ingest-pipeline
 ```
@@ -107,7 +107,7 @@ Then add the Kibana hostname to any other entries for that IP address in the loc
 172.20.0.5 logs.testcluster.example
 ```
 
-## 5. Run Live Analysis
+## 5. Use Kibana for Live Log Analysis
 
 Sign in to Kibana with the following details and access log data from Dev Tools.
 
@@ -129,6 +129,14 @@ GET curity-system*/_search
     }
   }
 }
+```
+
+Elasticsearch indexes get created when Filebeat first sends a particular type of log data for a new day.\
+Each document in the results has an Elasticsearch index such as `.ds-curity-request-2025.03.05-000001`.\
+Run the following format of command to find an index template for an index:
+
+```text
+POST /_index_template/_simulate_index/.ds-curity-request-2025.03.05-000001
 ```
 
 ## Documentation

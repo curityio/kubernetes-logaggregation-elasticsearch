@@ -38,7 +38,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
 
 ```json
 {
-  "_index": ".ds-curity-request-2025.03.05-2025.03.05-000001",
+  "_index": ".ds-curity-request-2025.03.05-000001",
   "_id": "FinAZZUBNGGgKy8u4Kq8",
   "_score": 2.1282315,
   "_source": {
@@ -141,7 +141,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
 
 ```json
 {
-  "_index": ".ds-curity-audit-2025.03.05-2025.03.05-000001",
+  "_index": ".ds-curity-audit-2025.03.05-000001",
   "_id": "NynBZZUBNGGgKy8uCarZ",
   "_score": 0.83624804,
   "_source": {
