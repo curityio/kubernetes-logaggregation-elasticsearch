@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["curity-audit-*"],
+  "index_patterns": [".ds-curity-audit-*"],
   "template":
   {
     "mappings": 

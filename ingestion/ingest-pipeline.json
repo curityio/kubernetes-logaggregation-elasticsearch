@@ -26,6 +26,7 @@ if (fields != null) {
         if (value.length() >= 2) {
           value = value.substring(1, value.length() - 1);
         }
+
         if (key == 'duration' || key == 'size' || key == 'status') {
           http[key] = Integer.parseInt(value);
         } else {
