@@ -26,7 +26,6 @@ if (ctx['logtype'] == 'request') {
   }
 
   ctx['http'] = http;
-  ctx['message'] = '';
 }
 
 if (ctx['logtype'] == 'audit') {
@@ -59,11 +58,10 @@ if (ctx['logtype'] == 'audit') {
   }
 
   ctx['audit'] = audit;
-  ctx['message'] = '';
 }"
       },
       "remove": {
-        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields", "logtype"],
+        "field": ["endOfBatch", "instant", "log", "marker", "stream", "fields", "logtype", "message"],
         "ignore_missing": true
       }
     }

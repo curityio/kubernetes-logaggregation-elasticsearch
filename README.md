@@ -116,7 +116,7 @@ Sign in to Kibana with the following details and access log data from Dev Tools.
 - Password: Password1
 
 For example, run Lucene or SQL queries on these indexes to operate on JSON log data.\
-You can quickly locate data by a field in the log schema, like an OpenTelemetry trace ID.
+You can quickly filter logging events using values for fields in the log schema, like an OpenTelemetry trace ID.
 
 ```text
 GET curity-system*/_search

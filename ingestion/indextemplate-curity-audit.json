@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["curity-audit*"],
+  "index_patterns": ["*curity-audit*"],
   "template":
   {
     "mappings": 
@@ -76,6 +76,9 @@
             "session": 
             {
               "type": "keyword"
+            },
+            "instant": {
+              "type": "date"
             }
           }
         },

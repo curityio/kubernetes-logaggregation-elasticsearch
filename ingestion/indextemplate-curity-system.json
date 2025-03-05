@@ -1,5 +1,5 @@
 {
-  "index_patterns": ["curity-system*"],
+  "index_patterns": ["*curity-system*"],
   "template":
   {
     "mappings": 
