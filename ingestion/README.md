@@ -38,7 +38,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
 
 ```json
 {
-  "_index": ".ds-curity-request-2025.03.05-000001",
+  "_index": "curity-request-2025.03.05",
   "_id": "FinAZZUBNGGgKy8u4Kq8",
   "_score": 2.1282315,
   "_source": {
@@ -92,7 +92,7 @@ GET curity-request*/_search
 In Kibana Dev Tools, use a [simulation endpoint](https://www.elastic.co/guide/en/elasticsearch/reference/current/simulate-pipeline-api.html) to debug the script and view processor results:
 
 ```text
-POST /_ingest/pipeline/curity-ingest-pipeline/_simulate?verbose=true
+POST /_ingest/pipeline/curity/_simulate?verbose=true
 {
   "docs": [
     {
@@ -141,7 +141,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
 
 ```json
 {
-  "_index": ".ds-curity-audit-2025.03.05-000001",
+  "_index": "curity-audit-2025.03.05",
   "_id": "NynBZZUBNGGgKy8uCarZ",
   "_score": 0.83624804,
   "_source": {
@@ -192,7 +192,7 @@ GET curity-audit*/_search
 In Kibana Dev Tools, runs a command like this to debug the script and view processor results:
 
 ```text
-POST /_ingest/pipeline/curity-ingest-pipeline/_simulate?verbose=true
+POST /_ingest/pipeline/curity/_simulate?verbose=true
 {
   "docs": [
     {

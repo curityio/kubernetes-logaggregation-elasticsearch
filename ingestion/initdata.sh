@@ -39,13 +39,13 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Create the index template for Curity system logs
+# Create the index template for Curity logs
 #
-echo 'Creating the system logs index template ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-system" \
+echo 'Creating the Curity logs index template ...'
+HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity" \
   -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" \
   -H "content-type: application/json" \
-  -d @indextemplate-curity-system.json \
+  -d @indextemplate.json \
   -o $RESPONSE_FILE \
   -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -55,42 +55,10 @@ if [ "$HTTP_STATUS" != '200' ]; then
 fi
 
 #
-# Create the index template for Curity request logs
-#
-echo 'Creating the request logs index template ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-request" \
-  -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" \
-  -H "content-type: application/json" \
-  -d @indextemplate-curity-request.json \
-  -o $RESPONSE_FILE \
-  -w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the request logs index template: $HTTP_STATUS"
-  cat "$RESPONSE_FILE"
-  exit 1
-fi
-
-#
-# Create the index template for Curity audit logs
-#
-echo 'Creating the audit logs index template ...'
-HTTP_STATUS=$(curl -k -s -X PUT "$ELASTICSEARCH_URL/_index_template/curity-audit" \
-  -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" \
-  -H "content-type: application/json" \
-  -d @indextemplate-curity-audit.json \
-  -o $RESPONSE_FILE \
-  -w '%{http_code}')
-if [ "$HTTP_STATUS" != '200' ]; then
-  echo "*** Problem encountered creating the audit logs index template: $HTTP_STATUS"
-  cat "$RESPONSE_FILE"
-  exit 1
-fi
-
-#
 # Create the Curity ingest pipeline to control receiving data
 #
 echo 'Creating the Elasticsearch ingest pipeline ...'
-HTTP_STATUS=$(curl -s -X PUT "$ELASTICSEARCH_URL/_ingest/pipeline/curity-ingest-pipeline" \
+HTTP_STATUS=$(curl -s -X PUT "$ELASTICSEARCH_URL/_ingest/pipeline/curity" \
   -u "$ELASTICSEARCH_USER:$ELASTICSEARCH_PASSWORD" \
   -H 'Content-Type: application/json' \
   -d @ingest-pipeline.json \

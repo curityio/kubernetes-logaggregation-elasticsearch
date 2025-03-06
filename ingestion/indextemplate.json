@@ -1,5 +1,5 @@
 {
-  "index_patterns": [".ds-curity-audit-*"],
+  "index_patterns": ["curity-*"],
   "template":
   {
     "mappings": 
@@ -32,6 +32,72 @@
         },
         "threadPriority": {
           "type": "integer"
+        },
+        "thrown": {
+          "type": "object",
+          "enabled": false
+        },
+        "http":
+        {
+          "properties":
+          {
+            "client": 
+            {
+              "type": "keyword"
+            },
+            "protocol": 
+            {
+              "type": "keyword"
+            },
+            "secure": 
+            {
+              "type": "keyword"
+            },
+            "method": 
+            {
+              "type": "keyword"
+            },
+            "uri": 
+            {
+              "type": "keyword"
+            },
+            "lang": 
+            {
+              "type": "keyword"
+            },
+            "params": 
+            {
+              "type": "keyword"
+            },
+            "accept": 
+            {
+              "type": "keyword"
+            },
+            "content-type": 
+            {
+              "type": "keyword"
+            },
+            "request-headers": 
+            {
+              "type": "keyword"
+            },
+            "response-headers": 
+            {
+              "type": "keyword"
+            },
+            "status": 
+            {
+              "type": "integer"
+            },
+            "duration": 
+            {
+              "type": "integer"
+            },
+            "size": 
+            {
+              "type": "integer"
+            }
+          }
         },
         "audit":
         {

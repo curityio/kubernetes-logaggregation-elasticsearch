@@ -48,19 +48,17 @@ curity:
 
 ## 2. Configure Incoming Logging into Elastic Search
 
-In Elasticsearch, index templates define storage of logging events as type-safe JSON documents.
+- An [index template](ingestion/indextemplate.json) defined storage of logging events as type-safe JSON documents.
+- An [ingest pipeline](ingestion/README.md) enables Elasticsearch to transform log data to clean JSON documents.
+- A Kubernetes job runs a [script](ingestion/initdata.sh) to create the index template and the ingestion pipeline.
 
-- [System Logs Index Template](ingestion/indextemplate-curity-system.json)
-- [Request Logs Index Template](ingestion/indextemplate-curity-request.json)
-- [Audit Logs Index Template](ingestion/indextemplate-curity-audit.json)
-
-An [ingest pipeline](ingestion/README.md) enables Elasticsearch to transform log data to clean JSON documents.\
-A Kubernetes job runs a [script](ingestion/initdata.sh) to create the index templates and the ingestion pipeline.
+Elasticsearch indexes get created when Filebeat first sends a particular type of log data for a new day.\
+Each document in the results has an Elasticsearch index such as `curity-request-2025.03.05`.\
 
 ## 3. Configure Log Shipping
 
 The Filebeat log shipper reads log files from the `/var/log/containers` folder on Kubernetes nodes.\
-The log shipper uploads logging events and determines the Elasticsearch index from the file path.\
+The log shipper uploads logging events to an Elasticsearch index calculated from the file path and date.\
 The following partial configuration shows the approach.
 
 ```yaml
@@ -79,9 +77,9 @@ output.elasticsearch:
   hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
   username: ${ELASTICSEARCH_USERNAME}
   password: ${ELASTICSEARCH_PASSWORD}
-  index: "curity-%{[fields.logtype]}"
+  index: "curity-%{[fields.logtype]}-%{+yyyy.MM.dd}"
   pipelines:
-  - pipeline: curity-ingest-pipeline
+  - pipeline: curity
 ```
 
 ## 4. Deploy Elastic Stack Components
@@ -129,14 +127,6 @@ GET curity-system*/_search
     }
   }
 }
-```
-
-Elasticsearch indexes get created when Filebeat first sends a particular type of log data for a new day.\
-Each document in the results has an Elasticsearch index such as `.ds-curity-request-2025.03.05-000001`.\
-Run the following format of command to find an index template for an index:
-
-```text
-POST /_index_template/_simulate_index/.ds-curity-request-2025.03.05-000001
 ```
 
 ## Documentation

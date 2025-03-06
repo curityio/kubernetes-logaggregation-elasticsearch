@@ -38,13 +38,17 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
-      index: "curity-%{[fields.logtype]}"
+      index: "curity-%{[fields.logtype]}-%{+yyyy.MM.dd}"
       pipelines:
-      - pipeline: curity-ingest-pipeline
+      - pipeline: curity
 
-    setup.ilm.enabled: false
-    setup.template.name: curity
-    setup.template.pattern: curity-*
+    setup:
+      ilm:
+        enabled: false
+    setup:
+      template:
+        name: curity
+        pattern: curity-*
 
     processors:
     - drop_fields:
