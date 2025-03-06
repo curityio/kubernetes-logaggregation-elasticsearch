@@ -37,6 +37,32 @@
           "type": "object",
           "enabled": false
         },
+        "contextMap":
+        {
+          "properties":
+          {
+            "RequestId": 
+            {
+              "type": "keyword"
+            },
+            "SessionId": 
+            {
+              "type": "keyword"
+            },
+            "LongSessionId": 
+            {
+              "type": "keyword"
+            },
+            "TraceId": 
+            {
+              "type": "keyword"
+            },
+            "SpanId": 
+            {
+              "type": "keyword"
+            }
+          }
+        },
         "http":
         {
           "properties":
@@ -143,34 +169,9 @@
             {
               "type": "keyword"
             },
-            "instant": {
+            "instant":
+            {
               "type": "date"
-            }
-          }
-        },
-        "contextMap":
-        {
-          "properties":
-          {
-            "RequestId": 
-            {
-              "type": "keyword"
-            },
-            "SessionId": 
-            {
-              "type": "keyword"
-            },
-            "LongSessionId": 
-            {
-              "type": "keyword"
-            },
-            "TraceId": 
-            {
-              "type": "keyword"
-            },
-            "SpanId": 
-            {
-              "type": "keyword"
             }
           }
         }

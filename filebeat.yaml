@@ -45,10 +45,10 @@ data:
     setup:
       ilm:
         enabled: false
-    setup:
       template:
-        name: curity
-        pattern: curity-*
+        name: "curity"
+        pattern: "curity-*"
+        enabled: false
 
     processors:
     - drop_fields:

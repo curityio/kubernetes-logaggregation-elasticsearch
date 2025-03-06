@@ -31,7 +31,7 @@ kubectl -n elasticstack apply -f kibana.yaml
 
 #
 # Wait for the job to complete so that index templates get created before indexes get created
-# This ensures that JSON logs reecived from Filebeat get ingested with the correct data types
+# This ensures that JSON logs from Filebeat get ingested with the correct data types
 #
 echo 'Waiting for the initialization job to configure ingestion ...'
 kubectl -n elasticstack wait --for=condition=complete job/elastic-initdata-job --timeout=300s
