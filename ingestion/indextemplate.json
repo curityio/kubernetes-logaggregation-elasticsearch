@@ -63,7 +63,33 @@
             }
           }
         },
-        "http":
+        "system":
+        {
+          "properties":
+          {
+            "type": 
+            {
+              "type": "keyword"
+            },
+            "httpStatus": 
+            {
+              "type": "integer"
+            },
+            "errorMessageId": 
+            {
+              "type": "keyword"
+            },
+            "errorCode": 
+            {
+              "type": "keyword"
+            },
+            "errorDescription": 
+            {
+              "type": "keyword"
+            }
+          }
+        },
+        "request":
         {
           "properties":
           {
