@@ -47,9 +47,9 @@ curity:
 
 ## 2. Configure Incoming Logging into Elastic Search
 
-- An [index template](ingestion/indextemplate.json) defines storage of logging events as type-safe JSON documents.
-- An [ingest pipeline](ingestion/README.md) enables Elasticsearch to receive log data as clean JSON documents.
-- A Kubernetes job runs a [script](ingestion/initdata.sh) to create the index template and the ingestion pipeline.
+- An [index template](ingestion/indextemplate.json) helps to ensure the type safety storage of fields in logging events.
+- An [ingest pipeline](ingestion/README.md) enables Elasticsearch to transform recived log data to the final JSON format.
+- A Kubernetes job runs a [script](ingestion/initdata.sh) to create the index template and the ingest pipeline.
 
 Elasticsearch creates indexes when Filebeat first sends a particular type of log data for a new day.\
 Each document in the results has an Elasticsearch index such as `curity-request-2025.03.05`.\
