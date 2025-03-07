@@ -1,7 +1,3 @@
-#
-# Deploy a Kibana container that connects to the Elastic Search container
-#
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -31,7 +27,7 @@ spec:
     spec:
       containers:
         - name: kibana
-          image: docker.elastic.co/kibana/kibana:8.17.1
+          image: docker.elastic.co/kibana/kibana:8.17.2
           env:
             - name: ELASTICSEARCH_HOSTS
               value: 'http://elastic-svc:9200'
@@ -42,7 +38,26 @@ spec:
             - name: SERVER_SSL_ENABLED
               value: 'false'
             - name: SERVER_PUBLICBASEURL
-              value: http://elastic.local
+              value: https://logs.testcluster.example
           ports:
             - containerPort: 5601
               name: kibana
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kibana-route
+spec:
+  parentRefs:
+  - name: kong-gateway
+    namespace: apigateway
+  hostnames:
+  - logs.testcluster.example
+  rules:
+  - matches:
+    - path:
+        value: /
+    backendRefs:
+    - name: kibana-svc
+      kind: Service
+      port: 5601

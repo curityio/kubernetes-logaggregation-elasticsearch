@@ -1,7 +1,3 @@
-#
-# Deploy a single Elasticsearch container with user name and password authentication enabled
-#
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -31,7 +27,7 @@ spec:
     spec:
       containers:
         - name: elastic
-          image: docker.elastic.co/elasticsearch/elasticsearch:8.17.1
+          image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
           env:
             - name: discovery.type
               value: 'single-node'
@@ -45,3 +41,18 @@ spec:
               value: 'Password1'
             - name: ES_JAVA_OPTS
               value: -Xmx4g
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: elastic-initdata-job
+spec:
+  template:
+    metadata:
+      labels:
+        app: elastic-initdata-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: elastic-initdata-job
+          image: elastic-initdata-job:1.0.0
