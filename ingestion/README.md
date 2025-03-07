@@ -10,10 +10,7 @@ This example simulates a failed database connection and contains error details:
 
 ```json
 {
-  "instant": {
-    "epochSecond": 1741275691,
-    "nanoOfSecond": 959422575
-  },
+  "timeMillis": 1741275691,
   "thread": "req-189",
   "level": "WARN",
   "loggerName": "se.curity.identityserver.errors.SystemRuntimeException",
@@ -102,10 +99,7 @@ The following example shows a request logging event output by the Curity Identit
 
 ```json
 {
-  "instant": {
-    "epochSecond": 1741168884,
-    "nanoOfSecond": 623712005
-  },
+  "timeMillis": 1741168884,
   "thread": "req-171",
   "level": "INFO",
   "loggerName": "se.curity.identityserver.app.RequestReceiver",
@@ -208,10 +202,7 @@ The following example shows an audit logging event output by the Curity Identity
 
 ```json
 {
-  "instant": {
-    "epochSecond": 1741168884,
-    "nanoOfSecond": 615291919
-  },
+  "timeMillis": 1741168884,
   "thread": "req-171",
   "level": "INFO",
   "loggerName": "audit-events",
