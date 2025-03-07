@@ -1,4 +1,3 @@
-PUT /_ingest/pipeline/curity
 {
   "description": "Curity Logs Ingest Pipeline",
   "processors": [
