@@ -6,7 +6,7 @@
     {
       "properties": 
       {
-        "timestamp": {
+        "utcTime": {
           "type": "date"
         },
         "hostname": {
