@@ -21,9 +21,8 @@ Replace default layouts with JSON layouts for the system, request and audit logs
 ```xml
 <Appenders>
     <Console name="stdout" target="SYSTEM_OUT">
-        <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true">
-            <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
-            <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSZ}" />
+        <JSONLayout compact="true" eventEol="true" properties="true" includeTimeMillis="true">
+                <KeyValuePair key="hostname" value="${env:HOSTNAME}" />
         </JSONLayout>
         ...
     </Console>
@@ -120,7 +119,7 @@ Sign in to Kibana with the following details and access log data from Dev Tools.
 - Password: Password1
 
 For example, run Lucene or SQL queries on these indexes to operate on JSON log data.\
-You can quickly filter logging events using values for fields in the log schema, like an OpenTelemetry trace ID.
+You can quickly filter logging events using index fields like an OpenTelemetry trace ID.
 
 ```text
 GET curity-system*/_search

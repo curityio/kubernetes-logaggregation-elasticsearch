@@ -6,7 +6,7 @@ You can use Elasticsearch [painless scripting](https://www.elastic.co/guide/en/e
 ## System Logs
 
 The following example shows a system logging event output by the Curity Identity Server in JSON format.\
-This example simulates a failed database connection and contains error details:
+This example simulates a failed database connection and contains error details in the `message` field:
 
 ```json
 {
@@ -26,8 +26,7 @@ This example simulates a failed database connection and contains error details:
   },
   "threadId": 42,
   "threadPriority": 5,
-  "hostname": "curity-idsvr-runtime-6ccbf9799f-rgrrk",
-  "timestamp": "2025-03-05T10:03:24.623+0000"
+  "hostname": "curity-idsvr-runtime-6ccbf9799f-rgrrk"
 }
 ```
 
@@ -35,25 +34,32 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
 
 ```json
 {
-    "_index": "curity-system-2025.03.05",
-    "_id": "FinAZZUBNGGgKy8u4Kq9",
-    "_score": 1.0287709,
-    "_source": {
-      "fields": {
-        "logtype": "system"
-      },
-      "eventTime": 
-      "system": {
-        "errorCode": "generic_error",
-        "errorMessageId": "system.status.internal.error",
-        "errorDescription": "FATAL: database idsvr2 does not exist",
-        "type": "se.curity.identityserver.errors.SystemRuntimeException@8b67fc",
-        "httpStatus": 500
-      }
+  "_index": "curity-system-2025.03.05",
+  "_id": "FinAZZUBNGGgKy8u4Kq9",
+  "_score": 1.0287709,
+  "_source": {
+    "eventTime": "2025-03-06T15:41:31.000Z",
+    "loggerFqcn": "org.apache.logging.slf4j.Log4jLogger",
+    "level": "WARN",
+    "endOfBatch": true,
+    "thread": "req-189",
+    "threadPriority": 5,
+    "threadId": 42,
+    "hostname": "curity-idsvr-runtime-6ccbf9799f-rgrrk",
+    "@timestamp": "2025-03-07T10:04:15.743Z",,
+    "system": {
+      "errorCode": "generic_error",
+      "errorMessageId": "system.status.internal.error",
+      "errorDescription": "FATAL: database idsvr2 does not exist",
+      "type": "se.curity.identityserver.errors.SystemRuntimeException@8b67fc",
+      "httpStatus": 500
     },
-    "_ingest": {
-      "pipeline": "curity",
-      "timestamp": "2025-03-07T08:35:50.229561138Z"
+    "contextMap": {
+      "LongSessionId": "84aeadea-01cb-4431-bd55-282196a98202",
+      "RequestId": "kCPDgMRP",
+      "SessionId": "84aeadea",
+      "SpanId": "ca8578c5279899bb",
+      "TraceId": "2dddaab2003090620ad72cc856b93b9b"
     }
   }
 }
@@ -74,7 +80,7 @@ GET curity-system*/_search
 }
 ```
 
-In Kibana Dev Tools, use a [simulation endpoint](https://www.elastic.co/guide/en/elasticsearch/reference/current/simulate-pipeline-api.html) to debug the script and view processor results:
+In Kibana Dev Tools, use a [simulation endpoint](https://www.elastic.co/guide/en/elasticsearch/reference/current/simulate-pipeline-api.html) to debug the scripting logic.
 
 ```text
 POST /_ingest/pipeline/curity/_simulate?verbose=true
@@ -104,9 +110,6 @@ The following example shows a request logging event output by the Curity Identit
   "thread": "req-171",
   "level": "INFO",
   "loggerName": "se.curity.identityserver.app.RequestReceiver",
-  "marker": {
-    "name": "REQUEST"
-  },
   "message": "accept=\"application/json\" content-type=\"application/json\" duration=\"74\" lang=\"\" method=\"POST\" params=\"\" protocol=\"HTTP/1.1\" secure=\"false\" size=\"1587\" status=\"200\" uri=\"/oauth/v2/oauth-token\"",
   "endOfBatch": true,
   "loggerFqcn": "org.apache.logging.log4j.spi.AbstractLogger",
@@ -117,8 +120,7 @@ The following example shows a request logging event output by the Curity Identit
   },
   "threadId": 42,
   "threadPriority": 5,
-  "hostname": "curity-idsvr-runtime-65bddfd64f-cqm7s",
-  "timestamp": "2025-03-05T10:01:24.623+0000"
+  "hostname": "curity-idsvr-runtime-65bddfd64f-cqm7s"
 }
 ```
 
@@ -130,10 +132,11 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
   "_id": "FinAZZUBNGGgKy8u4Kq8",
   "_score": 2.1282315,
   "_source": {
+    "eventTime": "2025-03-05T10:01:24.000Z",
     "loggerFqcn": "org.apache.logging.log4j.spi.AbstractLogger",
+    "loggerName": "se.curity.identityserver.app.RequestReceiver",
     "level": "INFO",
     "thread": "req-171",
-    "message": "",
     "threadPriority": 5,
     "threadId": 42,
     "hostname": "curity-idsvr-runtime-65bddfd64f-cqm7s",
@@ -156,8 +159,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
       "TraceId": "ce41b85c6f00f167baa53fd814d23c30",
       "SpanId": "90a3f360f1a7112c"
     },
-    "loggerName": "se.curity.identityserver.app.RequestReceiver",
-    "timestamp": "2025-03-05T10:01:24.623+0000"
+    
   }
 }
 ```
@@ -217,8 +219,7 @@ The following example shows an audit logging event output by the Curity Identity
   },
   "threadId": 42,
   "threadPriority": 5,
-  "hostname": "curity-idsvr-runtime-65bddfd64f-cqm7s",
-  "timestamp": "2025-03-05T10:01:24.615+0000"
+  "hostname": "curity-idsvr-runtime-65bddfd64f-cqm7s"
 }
 ```
 
@@ -230,6 +231,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
   "_id": "NynBZZUBNGGgKy8uCarZ",
   "_score": 0.83624804,
   "_source": {
+    "eventTime": "2025-03-05T10:01:24.000Z",
     "loggerFqcn": "org.apache.logging.log4j.spi.AbstractLogger",
     "level": "INFO",
     "thread": "req-171",
@@ -253,8 +255,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
       "RequestId": "yK0nYfVW",
       "TraceId": "ce41b85c6f00f167baa53fd814d23c30",
       "SpanId": "90a3f360f1a7112c"
-    },
-    "timestamp": "2025-03-05T10:01:24.615+0000"
+    }
   }
 }
 ```
@@ -285,7 +286,7 @@ POST /_ingest/pipeline/curity/_simulate?verbose=true
       "_id": "FinAZZUBNGGgKy8u4Kq9",
       "_source": {
         "fields": {
-          "logtype": "request"
+          "logtype": "audit"
         },
         "message": "access-token-issued [923cc315729340008510706b01990d8a authenticatedClient=\"spa-client\" authenticatedSubject=\"johndoe\" client=\"spa-client\" instant=\"2025-03-05T10:01:24.615014186Z\" server=\"CnxNuqLW\" subject=\"3b5aba986d28551691bf94caff6a29466f521c47365aee02e67517157d25d4c8\"] Access token issued for subject \"3b5aba986d28551691bf94caff6a29466f521c47365aee02e67517157d25d4c8\" with client \"spa-client\""
       }
