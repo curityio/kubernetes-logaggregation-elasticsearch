@@ -42,6 +42,7 @@ The [ingest pipeline scripting logic](ingest-pipeline.json) saves the data to th
       "fields": {
         "logtype": "system"
       },
+      "eventTime": 
       "system": {
         "errorCode": "generic_error",
         "errorMessageId": "system.status.internal.error",
