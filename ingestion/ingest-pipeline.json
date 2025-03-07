@@ -2,6 +2,9 @@
   "description": "Curity Logs Ingest Pipeline",
   "processors": [
     {
+      "drop": {
+        "if" : "ctx.level == null"
+      },
       "script": {
         "lang": "painless",
         "description": "Transform incoming data",
