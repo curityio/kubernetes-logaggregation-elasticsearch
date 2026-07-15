@@ -1,5 +1,8 @@
 # Curity Identity Server Log Aggregation to Elastic Search
 
+[![Quality](https://img.shields.io/badge/quality-demo-red)](https://curity.io/resources/code-examples/status/)
+[![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
+
 Aggregates the following logs to Elasticsearch, where logs include OpenTelemetry trace and span IDs.
 
 - System logs
